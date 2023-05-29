@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    {% for i in logo %}
+    <link rel="icon" type="image/x-icon" href="{{ i.image.url }}" />
+    {% endfor %}
+    <title>Contact Us</title>
+  </head>
+  <body>
+    <nav>
+      <div class="navc1">
+        <a href="/">
+          {% for i in logo %}
+          <img src="{{ i.image.url }}" alt="" />
+          <p>{{ i.name }}</p>
+          {% endfor %}
+        </a>
+      </div>
+      <div class="navc2" id="content">
+        <a href="/">Home</a>
+        <a href="">About us</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/contact">Contact us</a>
+      </div>
+      <div id="menubtn">
+        <button id="toggleBtn"><i class="material-icons">menu</i></button>
+      </div>
+    </nav>
+    <div class="container">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="fname">First Name</label>
+        <input
+          type="text"
+          id="fname"
+          name="name"
+          placeholder="Your name.."
+          required
+        />
+
+        <label for="number">Number</label>
+        <input
+          type="number"
+          id="number"
+          name="number"
+          placeholder="Your number"
+          required
+        />
+
+        <label for="place">Place</label>
+        <input
+          type="text"
+          id="place"
+          name="place"
+          placeholder="Your place"
+          required
+        />
+
+        <label for="image">Image</label>
+        <input type="file" id="image" name="image" accept="image/*" required />
+
+        <label for="subject">Subject</label>
+        <textarea
+          id="subject"
+          name="subject"
+          placeholder="Write something.."
+          style="height: 200px"
+          required
+        ></textarea>
+
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+    <footer style="margin-left: 0px" class="footer">
+      <div class="footer1">
+        <div>
+          <h1>Urban Agriculture</h1>
+        </div>
+        <div class="share-links">
+          <a href="https://www.facebook.com/way2agribusiness" target="_blank"
+            ><i class="fa fa-facebook-square"></i
+          ></a>
+          <a href="https://twitter.com/Way2agribusines" target="_blank"
+            ><i class="fa fa-twitter"></i
+          ></a>
+          <a href="https://in.pinterest.com/Way2Agritech/_saved/" target="_blank"
+            ><i class="fa fa-pinterest"></i
+          ></a>
+          <a
+            href="https://www.youtube.com/channel/UCEpkh59M-MDOj0TH6lxRpMg"
+            target="_blank"
+            ><i class="fa fa-youtube"></i
+          ></a>
+          <a href="https://www.instagram.com/way2agribusiness/" target="_blank"
+            ><i class="fa fa-instagram"></i
+          ></a>
+          <a
+            href="https://www.linkedin.com/feed/?trk=homepage-basic_signin-form_submit"
+            target="_blank"
+            ><i class="fa fa-linkedin"></i
+          ></a>
+        </div>
+      </div>
+      <hr style="margin: 10px 0" />
+      <div class="footer2">
+        <div class="footer__addr">
+          <h2 style="font-weight: 500" class="footerb">Address</h2>
+
+          <address>
+            ಕೃಷಿ ಉದ್ದಿಮೆ ಕೇಂದ್ರ/ Agribusiness Center # 636, BDA Block 2, APMC
+            (RMC) Yard, Yeshwanthpura, Bengaluru - 560022<br />
+          </address>
+          <h2 style="font-weight: 500" class="footerb">Contact</h2>
+          <ul>
+            <li>
+              <i class="material-icons">mail</i>
+              <a href="mailto:way2agritech@way2agribusiness.com"
+                >way2agritech@way2agribusiness.com</a
+              >
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <i class="material-icons">phone</i>
+              <a href="tel:+91-8277078435">+91-8277078435</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer__addr">
+          <h2 style="font-weight: 500" class="footerb">Loaction</h2>
+          <iframe
+            class="loc"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1943.6050773953866!2d77.54547795799927!3d13.022285093117015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3d6fbf2aa7ad%3A0x886c14d1df2c166b!2sWay2Agritech!5e0!3m2!1sen!2sin!4v1516097691514"
+            width="340"
+            height="210"
+            frameborder="0"
+            style="border: 0; text-align: center"
+            allowfullscreen=""
+          ></iframe>
+        </div>
+
+        <div class="footer__addr">
+          <h2 style="font-weight: 500" class="footerb">Our Online services</h2>
+          <ul>
+            <li style="color: white; font-size: 15px">
+              Way2ABI Website:<a
+                href="https://www.way2agribusiness.com/"
+                class="online"
+                >&nbsp;&nbsp;way2agribusiness.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              E-Commerce (Input):<a
+                href="https://way2agritech.com/"
+                class="online"
+                >&nbsp;&nbsp;way2agritech.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              E-Commerce (Output):<a href="https://way2foods.in/" class="online"
+                >&nbsp;&nbsp;way2foods.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Social Media Web:<a
+                href="https://www.karnatakaagribusiness.com/"
+                class="online"
+                >&nbsp;&nbsp;karnatakaagribusiness.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Farm Machineries:<a
+                href="https://www.powertiller.in/"
+                class="online"
+                >&nbsp;&nbsp;powertiller.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              PGP &amp; Plant Protection:<a
+                href="https://www.drsoilhealth.com/"
+                class="online"
+                >&nbsp;&nbsp;drsoilhealth.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Terrace Gardening:<a
+                href="https://www.urbanagriculture.in/"
+                class="online"
+                >&nbsp;&nbsp;urbanagriculture.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Vegetables:<a
+                href="https://www.way2vegetables.com/"
+                class="online"
+                >&nbsp;&nbsp;way2vegetables.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Groceries:<a href="https://www.way2groceries.in/" class="online"
+                >&nbsp;&nbsp;way2groceries.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Mob Apps:<a
+                href="https://play.google.com/store/search?q=way2agribusi&amp;c=apps"
+                class="online"
+                >&nbsp;&nbsp;Way2agribusiness Apps</a
+              ><br />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr style="margin: 10px 0" />
+
+      <div class="legal">
+        <p>
+          CopyRight &copy; 2023 Way2Agribusines India Pvt Ltd. All Rights
+          Reserved
+          <a
+            class="footerb"
+            style="background-color: #ffc100; color: #215d0e"
+            href="https://way2agritech.com/"
+            target="_blank"
+          >
+            Way2Agribusiness
+          </a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,480 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% for i in keys %}
+    <meta name="keywords" content="{{ i.key }}">
+    {% endfor %}
+    {% for i in meta %}
+    <meta name="meta" content="{{ i.meta }}">
+    {% endfor %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+    {% for i in logo %}
+    <link rel="icon" type="image/x-icon" href="{{ i.image.url }}" />
+    <title>{{ i.name }}</title>
+    {% endfor %}
+  </head>
+  <body>
+    {% for i in link %}
+    <a href="{{ i.external_link }}"></a>
+    {% endfor %}
+    <nav>
+      <div class="navc1">
+        <a href="/">
+          {% for i in logo %}
+          <img src="{{ i.image.url }}" alt="" />
+          <p>{{ i.name }}</p>
+          {% endfor %}
+        </a>
+        <button onclick="mySidebar()" class="pulse" id="sidebarview">
+          Products
+        </button>
+      </div>
+      <div class="navc2" id="content">
+        <button id="mode-toggle" class="dmode">
+          <i class="fa fa-moon-o"></i>
+        </button>
+        <a href="/">Home</a>
+        <a href="">About us</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/contact">Contact us</a>
+        <!-- <button class="button-30" role="button">
+          {% if request.user.is_authenticated %}
+          <i class="material-icons"></i
+          ><a href="{% url 'account_logout' %}">Logout</a>
+          {% else %}
+          <i class="material-icons"></i
+          ><a href="{% url 'account_login' %}">Login</a>
+          {% endif %}
+        </button> -->
+      </div>
+      <div id="menubtn">
+        <button id="toggleBtn"><i class="material-icons">menu</i></button>
+      </div>
+    </nav>
+    <!-- ////////////////////////END NAV////////////////////////////////// -->
+    <div class="hpgrid">
+      {% block conten %}
+      <div class="sidebar" id="side_bar">
+        <a href="/products" class="shead">
+          <i class="fa fa-cart-arrow-down"></i>
+          <h1>Products</h1>
+          <i class="fa fa-sort-asc"></i>
+        </a>
+        {% for product in products %}
+        <a
+          href="{% url 'appagri:product_details' product.name|slugify product.id %}"
+        >
+          <p class="prashadrop">{{ product.name }}</p>
+        </a>
+        <!-- <hr /> -->
+        {% endfor %}
+        <button class="weatherbtn" onclick="myFunction()">
+          <i class="fa fa-cloud" style="padding-right: 5px"></i>Weather
+        </button>
+      </div>
+      <!-- //////////////////////Weather///////////////////// -->
+      <div class="wrapper" id="myDIV">
+        <header>
+          <i class="bx bx-left-arrow-alt"></i><span>Live Weather</span>
+          <p class="closebtn"><i class="fa fa-close"></i></p>
+        </header>
+        <section class="input-part">
+          <p class="info-txt"></p>
+          <div class="content">
+            <input
+              type="text"
+              spellcheck="false"
+              placeholder="Enter city name"
+              required
+            />
+            <div class="separator"></div>
+            <button>Get Device Location</button>
+          </div>
+        </section>
+        <section class="weather-part">
+          <img class="wdisp" src="" alt="Weather Icon" />
+          <i class="fa fa-cloud"></i>
+          <div class="temp">
+            <span class="numb">_</span>
+            <span class="deg">°</span>C
+          </div>
+          <div class="weather">_ _</div>
+          <div class="location">
+            <i class="bx bx-map"></i>
+            <span>_, _</span>
+          </div>
+          <div class="bottom-details">
+            <div class="column feels">
+              <i class="bx bxs-thermometer"></i>
+              <div class="details">
+                <div class="temp">
+                  <span class="numb-2">_</span>
+                  <span class="deg">°</span>C
+                </div>
+                <p>Feels like</p>
+              </div>
+            </div>
+            <div class="column humidity">
+              <i class="bx bxs-droplet-half"></i>
+              <div class="details">
+                <span>_</span>
+                <p>Humidity</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- //////////////////////Weather end///////////////////// -->
+      <!-- ///////////////////////////////BANNER///////////////////////////////// -->
+      <div class="hbody">
+        <section class="carousel" aria-label="Gallery">
+          <ol class="carousel__viewport">
+            {% for b in banners %}
+            <li id="carousel__slide1" tabindex="0" class="carousel__slide">
+              <img src="{{ b.image.url }}" alt="" />
+              <div class="carousel__snapper"></div>
+            </li>
+            {% endfor %}
+          </ol>
+        </section>
+        <!-- ////////////////////////////END BANNER?//////////////////////////////////////// -->
+        <!-- ///////////////////highlights////////////////// -->
+        <div class="hhighlight">
+          {% for i in highlight %}
+          <div>
+            <img src="{{ i.image.url }}" alt="" />
+            <strong>{{ i.text }}</strong>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- ///////////////////End highlights////////////////// -->
+        <!-- ///////////////////Main information////////////////// -->
+        {% for i in main_info %}
+        <div class="infomain">
+          <div class="infocontainerone">
+            <div style="display: flex; justify-content: center">
+              <img class="imgone" src="{{ i.imageone.url }}" alt="" />
+            </div>
+            <div style="display: flex; justify-content: center">
+              <img class="imgtwo" src="{{ i.imagetwo.url }}" alt="" />
+              <img class="imgthree" src="{{ i.imagethree.url }}" alt="" />
+            </div>
+          </div>
+          <div class="infocontainertwo">
+            <h2 class="hhedding" style="text-align: left; margin-left: 0">
+              {{ i.hedding }}
+            </h2>
+            <p class="spinfo" style="margin-right: 6%">{{ i.information }}</p>
+          </div>
+        </div>
+        {% endfor %}
+
+        <!-- ///////////////////End Main information////////////////// -->
+        <!-- ///////////////////////SUB PRODUCT CARDS/////////////////////////// -->
+        {% if sub_products %}
+        <h3 class="hhedding">Related Products</h3>
+        <div class="subpcard">
+          {% for sub_product in sub_products %}
+          <div class="spcard">
+            <a
+              href="{% url 'appagri:sub_product_details' sub_product.name|slugify sub_product.id %}"
+            >
+              <p class="spdiscout">-{{ sub_product.off }} OFF</p>
+              <img src="{{ sub_product.spimage.url }}" alt="" />
+              <div class="spindiv">
+                <strong>{{ sub_product.name }}</strong>
+                <p style="font-weight: 500">₹{{ sub_product.price }}</p>
+              </div>
+              <div class="spindivtwo">
+                <p class="spviewmore">View more</p>
+                <p style="text-decoration: line-through; font-size: 14px">
+                  ₹{{ sub_product.discount }}
+                </p>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <!-- //////////////////Web info/////////////////////// -->
+        {% for i in webinfo %}
+        <div class="webinfomain">
+          <div class="cardo">
+            <div class="card-img">
+              <img src="{{ i.image.url }}" alt="" />
+            </div>
+            <div class="card-info">
+              <strong class="nice">{{ i.English_hedding }}</strong>
+              <p class="text-body">{{ i.English_text }}</p>
+            </div>
+          </div>
+          <div class="cardo">
+            <div class="card-img">
+              <img src="{{ i.image.url }}" alt="" />
+            </div>
+            <div class="card-info">
+              <strong class="nice">{{ i.Kannada_hedding }}</strong>
+              <p class="text-body">{{ i.Kannada_text }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- //////////////////Web info/////////////////////// -->
+
+        <!-- //////////////PRODUCTS////////////////////////// -->
+        <h3 class="hhedding">OUR PRODUCTS</h3>
+        <div class="hpmain">
+          {% for product in products %}
+          <div class="hpcard">
+            <a
+              href="{% url 'appagri:product_details' product.name|slugify product.id %}"
+            >
+              <div>
+                <img src="{{ product.image.url }}" alt="" />
+              </div>
+              <strong>{{ product.name }}</strong>
+              <p class="spviewmore" style="margin-left: 10px">View more</p>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- ////////////////////PRODUCT END///////////////////// -->
+        <h2 class="hhedding">Download our Brouchers</h2>
+        <div id="wrapo">
+          <a href="/static/pdf/Way2Agritech_Brochure.pdf" class="btn-slide2">
+            <span class="circle2"><i class="fa fa-download"></i></span>
+            <span class="title2">Download</span>
+            <span class="title-hover2">Click here</span>
+          </a>
+          <a href="/static/pdf/Way2Agritech_DSH (1).xlsx" class="btn-slide2">
+            <span class="circle2"><i class="fa fa-download"></i></span>
+            <span class="title2">Download</span>
+            <span class="title-hover2">Click here</span>
+          </a>
+          <a href="/static/pdf/Way2Agritech_ppt (1).pdf" class="btn-slide2">
+            <span class="circle2"><i class="fa fa-download"></i></span>
+            <span class="title2">Download</span>
+            <span class="title-hover2">Click here</span>
+          </a>
+        </div>
+        <!-- //////////////End Brochers///////////// -->
+
+        <!-- ////////////////Brands//////////////////// -->
+        <h2 class="hhedding">Collabration</h2>
+        <article class="wrappero">
+          <div class="marquee">
+            <div class="marquee__group">
+              {% for i in brands %}
+              <img src="{{ i.image.url }}" alt="" />
+              {% endfor %}
+            </div>
+
+            <div class="marquee__group">
+              {% for i in brands %}
+              <img src="{{ i.image.url }}" alt="" />
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="marquee marquee--reverse">
+            <div class="marquee__group">
+              {% for i in brands %}
+              <img src="{{ i.image.url }}" alt="" />
+              {% endfor %}
+            </div>
+
+            <div aria-hidden="true" class="marquee__group">
+              {% for i in brands %}
+              <img src="{{ i.image.url }}" alt="" />
+              {% endfor %}
+            </div>
+          </div>
+        </article>
+        <!-- //////////////////////Brands end/////////////////////////// -->
+        <!-- ///////////////////////END SUB PRODUCT CARDS/////////////////////////// -->
+        {% endblock %}
+      </div>
+    </div>
+
+    <!-- ////////////////////FOOTER START///////////////////////// -->
+    <footer class="footer">
+      <div class="footer1">
+        <div>
+          <h1>Urban Agriculture</h1>
+        </div>
+        <div class="share-links">
+          <a href="https://www.facebook.com/way2agribusiness" target="_blank"
+            ><i class="fa fa-facebook-square"></i
+          ></a>
+          <a href="https://twitter.com/Way2agribusines" target="_blank"
+            ><i class="fa fa-twitter"></i
+          ></a>
+          <a
+            href="https://in.pinterest.com/Way2Agritech/_saved/"
+            target="_blank"
+            ><i class="fa fa-pinterest"></i
+          ></a>
+          <a
+            href="https://www.youtube.com/channel/UCEpkh59M-MDOj0TH6lxRpMg"
+            target="_blank"
+            ><i class="fa fa-youtube"></i
+          ></a>
+          <a href="https://www.instagram.com/way2agribusiness/" target="_blank"
+            ><i class="fa fa-instagram"></i
+          ></a>
+          <a
+            href="https://www.linkedin.com/feed/?trk=homepage-basic_signin-form_submit"
+            target="_blank"
+            ><i class="fa fa-linkedin"></i
+          ></a>
+        </div>
+      </div>
+      <hr style="margin: 10px 0" />
+      <div class="footer2">
+        <div class="footer__addr">
+          <h2 style="font-weight: 500" class="footerb">Address</h2>
+
+          <address>
+            ಕೃಷಿ ಉದ್ದಿಮೆ ಕೇಂದ್ರ/ Agribusiness Center # 636, BDA Block 2, APMC
+            (RMC) Yard, Yeshwanthpura, Bengaluru - 560022<br />
+          </address>
+          <h2 style="font-weight: 500" class="footerb">Contact</h2>
+          <ul>
+            <li>
+              <i class="material-icons">mail</i>
+              <a href="mailto:way2agritech@way2agribusiness.com"
+                >way2agritech@way2agribusiness.com</a
+              >
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <i class="material-icons">phone</i>
+              <a href="tel:+91-8277078435">+91-8277078435</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer__addr">
+          <h2 style="font-weight: 500" class="footerb">Loaction</h2>
+          <iframe
+            class="loc"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1943.6050773953866!2d77.54547795799927!3d13.022285093117015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3d6fbf2aa7ad%3A0x886c14d1df2c166b!2sWay2Agritech!5e0!3m2!1sen!2sin!4v1516097691514"
+            width="340"
+            height="210"
+            frameborder="0"
+            style="border: 0; text-align: center"
+            allowfullscreen=""
+          ></iframe>
+        </div>
+
+        <div class="footer__addr">
+          <h2 style="font-weight: 500" class="footerb">Our Online services</h2>
+          <ul>
+            <li style="color: white; font-size: 15px">
+              Way2ABI Website:<a
+                href="https://www.way2agribusiness.com/"
+                class="online"
+                >&nbsp;&nbsp;way2agribusiness.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              E-Commerce (Input):<a
+                href="https://way2agritech.com/"
+                class="online"
+                >&nbsp;&nbsp;way2agritech.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              E-Commerce (Output):<a href="https://way2foods.in/" class="online"
+                >&nbsp;&nbsp;way2foods.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Social Media Web:<a
+                href="https://www.karnatakaagribusiness.com/"
+                class="online"
+                >&nbsp;&nbsp;karnatakaagribusiness.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Farm Machineries:<a
+                href="https://www.powertiller.in/"
+                class="online"
+                >&nbsp;&nbsp;powertiller.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              PGP &amp; Plant Protection:<a
+                href="https://www.drsoilhealth.com/"
+                class="online"
+                >&nbsp;&nbsp;drsoilhealth.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Terrace Gardening:<a
+                href="https://www.urbanagriculture.in/"
+                class="online"
+                >&nbsp;&nbsp;urbanagriculture.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Vegetables:<a
+                href="https://www.way2vegetables.com/"
+                class="online"
+                >&nbsp;&nbsp;way2vegetables.com</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Groceries:<a href="https://www.way2groceries.in/" class="online"
+                >&nbsp;&nbsp;way2groceries.in</a
+              ><br />
+            </li>
+            <li style="color: white; font-size: 15px">
+              Mob Apps:<a
+                href="https://play.google.com/store/search?q=way2agribusi&amp;c=apps"
+                class="online"
+                >&nbsp;&nbsp;Way2agribusiness Apps</a
+              ><br />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr style="margin: 10px 0" />
+
+      <div class="legal">
+        <p>
+          CopyRight &copy; 2023 Way2Agribusines India Pvt Ltd. All Rights
+          Reserved
+          <a
+            class="footerb"
+            style="background-color: #ffc100; color: #215d0e"
+            href="https://way2agritech.com/"
+            target="_blank"
+          >
+            Way2Agribusiness
+          </a>
+        </p>
+      </div>
+    </footer>
+  </body>
+  <script src="{% static 'js/script.js' %}"></script>
+</html>

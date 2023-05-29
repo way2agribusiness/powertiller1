@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <meta
+      name="viewport"
+      content="{% block meta %}Way2AgriTech{% endblock %}"
+    />
+    {% for i in logo %}
+    <link rel="icon" type="image/x-icon" href="{{ i.image.url }}" />
+    {% endfor %}
+    <title>{% block title %}Urban Agriculture{% endblock %}</title>
+  </head>
+  <body>
+    <nav>
+      <div class="navc1">
+        <a href="/">
+          {% for i in logo %}
+          <img src="{{ i.image.url }}" alt="" />
+          <p>{{ i.name }}</p>
+          {% endfor %}
+        </a>
+      </div>
+      <div class="navc2" id="content">
+        <a href="/">Home</a>
+        <a href="">About us</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/contact">Contact us</a>
+        <button class="button-30" role="button">
+          {% if request.user.is_authenticated %}
+          <i class="material-icons"></i
+          ><a href="{% url 'account_logout' %}">Logout</a>
+          {% else %}
+          <i class="material-icons"></i
+          ><a href="{% url 'account_login' %}">Login</a>
+          {% endif %}
+        </button>
+      </div>
+      <div id="menubtn">
+        <button id="toggleBtn"><i class="material-icons">menu</i></button>
+      </div>
+    </nav>
+
+    {% block body %} {% block content %}{% endblock %} {% endblock %}
+
+    <footer style="margin-left: 0px;" class="footer">
+      <div class="footer__addr">
+        <h1 class="footer__logo">Urban Agriculture</h1>
+
+        <h2 style="font-weight: 500">Address</h2>
+
+        <address>
+          ಕೃಷಿ ಉದ್ದಿಮೆ ಕೇಂದ್ರ/ Agribusiness Center # 636, BDA Block 2, APMC
+          (RMC) Yard, Yeshwanthpura, Bengaluru - 560022<br />
+        </address>
+        <h2 style="font-weight: 500">Contact</h2>
+        <ul>
+          <li>
+            <i class="material-icons">mail</i>
+            <a href="mailto:way2agritech@way2agribusiness.com"
+              >way2agritech@way2agribusiness.com</a
+            >
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <i class="material-icons">phone</i>
+            <a href="tel:+91-8277078435">+91-8277078435</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer__addr">
+        <h2 style="font-weight: 500">Loaction</h2>
+        <iframe
+          class="loc"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1943.6050773953866!2d77.54547795799927!3d13.022285093117015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3d6fbf2aa7ad%3A0x886c14d1df2c166b!2sWay2Agritech!5e0!3m2!1sen!2sin!4v1516097691514"
+          width="340"
+          height="210"
+          frameborder="0"
+          style="border: 0; text-align: center"
+          allowfullscreen=""
+        ></iframe>
+      </div>
+
+      <div class="footer__addr"></div>
+
+      <div class="footer__addr"></div>
+
+      <div class="legal">
+        <p>&copy; 2019 Something. All rights reserved.</p>
+
+        <div class="legal__links">
+          <span
+            >Made with <span class="heart">♥</span> remotely from Anywhere</span
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script src="{% static 'js/script.js' %}"></script>
+</html>

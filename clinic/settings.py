@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-qda2g=njwc1ern=9amy!4=2v_iea3c$w%j41+-p(ili%a62yml
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['powertiller.in', 'www.powertiller.in', 'localhost', '64.227.154.192']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -77,7 +77,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'powertiller',
         'USER': 'tiller',
-        'PASSWORD': 'AVNS_vvB_8Ew-qFrNDf1wzXo',
+        'PASSWORD': 'AVNS_UVEOt0tn89ioxyzgirH',
         'HOST': 'way2agribusiness-mysql-do-user-13941505-0.b.db.ondigitalocean.com',
         'PORT': '25060' 
     }

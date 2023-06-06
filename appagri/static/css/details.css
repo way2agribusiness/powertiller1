@@ -78,11 +78,12 @@
   border-radius: 10px;
 }
 .subpcard {
+  background: #dddddd;
   flex-wrap: wrap;
   display: flex;
   gap: 10px;
   justify-content: center;
-  background-color: #ffc100;
+
 }
 .subpcard div {
   width: 255px;
@@ -122,13 +123,13 @@
   text-decoration: underline;
 }
 .hpmain {
-  background-color: #215d0e;
   padding-bottom: 10px;
 }
 .hpcard {
   background-color: #fff;
 }
 .spinfo {
+  padding: 20px;
   margin-right: 2%;
   color: #215f0ec7;
   text-align: justify;
@@ -273,6 +274,9 @@
 .fchange {
   margin-left: 20%;
 }
+
+
+
 /* ////////PULSE ANIMATION/////////// */
 .pulse {
   font-size: 17px;

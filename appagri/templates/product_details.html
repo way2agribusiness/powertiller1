@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="meta" content="{{ product.meta }}" />
+    <meta name="description" content="{{ product.meta }}" />
     <meta name="keywords" content="{{ product.key }}" />
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <link rel="stylesheet" href="{% static 'css/details.css' %}" />
@@ -143,7 +143,7 @@
         <h2
           class="heddings"
           style="
-            background-color: #ffc100;
+            background-color: #dddddd;
             color: #215d0e;
             text-decoration-color: #215d0e;
           "
@@ -164,37 +164,6 @@
           {% endfor %}
         </div>
         {% endif %}
-        <!-- ////////////PRODUCTS//////////// -->
-        <h2 class="heddings" style="background-color: #215d0e; color: #ffc100">
-          All Our Products
-        </h2>
-        <div class="hpmain">
-          {% for product in products %}
-          <div class="hpcard">
-            <a
-              href="{% url 'appagri:product_details' product.name|slugify product.id %}"
-            >
-              <div>
-                <img src="{{ product.image.url }}" alt="" />
-              </div>
-              <strong>{{ product.name }}</strong>
-              <p class="spviewmore" style="margin-left: 10px">View more</p>
-            </a>
-          </div>
-          {% endfor %}
-        </div>
-        <div>
-          <!-- /////////////////GALLERY//////////////// -->
-          <h2 class="heddings">Gallery</h2>
-          <div class="main">
-            <img class="main_img" src="{{ product.image.url }}" />
-            <div class="sub_img">
-              {% for i in gallery %}
-              <img src="{{ i.gallery.url }}" />
-              {% endfor %}
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- ///////////////////////END SUB PRODUCT CARDS/////////////////////////// -->
@@ -255,6 +224,10 @@
             <li>
               <i class="material-icons">phone</i>
               <a href="tel:+91-8277078435">+91-8277078435</a>
+            </li>
+            <li>
+              <i class="material-icons">phone</i>
+              <a href="tel:+91-8277078435">080-24484173</a>
             </li>
           </ul>
         </div>

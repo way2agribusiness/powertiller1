@@ -5,6 +5,7 @@ body {
   color: #215f0ec7;
   text-align: justify;
   font-size: 15px;
+  padding: 20px;
 }
 .spmain {
   display: flex;
@@ -17,7 +18,7 @@ body {
   display: inline-block;
   font-weight: 500;
   color: #09105e;
-  font-size: 20px;
+  font-size: 25px;
 }
 .spimg img {
   max-width: none;
@@ -46,16 +47,22 @@ body {
   border-bottom: 2px solid #09105e;
   display: inline-block;
 }
+.prize-main h1 {
+  font-size: 23px;
+  font-weight: 600;
+}
+.prize-main span {
+  font-weight: 600;
+}
 .spdetails div {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
 }
 .spdetails div h1 {
   margin: 0;
 }
 .spdetails div p {
-  text-decoration: line-through;
   margin: 0;
 }
 .spdetails div h3 {

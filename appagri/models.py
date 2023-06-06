@@ -49,7 +49,6 @@ class SubProduct(models.Model):
     spimage =models.ImageField(upload_to='images/')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=10, decimal_places=2)
-    off = models.CharField(max_length=255)
     spinfo = models.TextField()
     ftype = models.CharField(max_length=255)
     avilability = models.CharField(max_length=255)
@@ -87,8 +86,11 @@ class SubProduct(models.Model):
     Key_15 = models.CharField(max_length=255, null=True, blank=True)
     Value_15 = models.CharField(max_length=255, null=True, blank=True)
     
-    def __str__(self):
-        return self.name[0:20]
+    def total(self):
+        if self.price > 0:
+            return int(abs(100 - ((self.discount / self.price) * 100)))
+        else:
+            return 0
 
 class Product_External_links(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='external_links')

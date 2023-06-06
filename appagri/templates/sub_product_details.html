@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="keywords" content="{{ parent.key }}" />
-    <meta name="meta" content="{{ parent.meta }}" />
+    <meta name="description" content="{{ parent.meta }}" />
     <link rel="stylesheet" href="{% static 'css/sp.css' %}" />
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <link
@@ -88,14 +88,15 @@
       </div>
       <div class="spdetails">
         <h2 style="margin: 0">{{ sub_product.name }}</h2>
-        <p class="smallhedding">
-          Fertilizer type: <span>{{ sub_product.ftype }}</span>
-        </p>
-        <p class="prize">Special prize</p>
-        <div>
-          <h1 style="margin: 0">₹{{ sub_product.price }}</h1>
-          <p style="margin: 0">₹{{ sub_product.discount }}</p>
-          <h3 style="margin: 0">{{ sub_product.off }}</h3>
+        <div class="prize-main">
+          <p class="smallhedding prize">Fertilizer type:</p>
+          <span>{{ sub_product.ftype }}</span>
+          <p class="prize">Special prize</p>
+          <div>
+            <h1 style="margin: 0">₹{{ sub_product.price }}</h1>
+            <p style="margin: 0; text-decoration: line-through;">₹{{ sub_product.discount }}</p>
+            <h3 style="margin: 0">{{ sub_product.total }}%</h3>
+          </div>
         </div>
         <h3 style="margin: 0">
           <i class="fa fa-star" style="color: #215d0e"></i>
@@ -109,116 +110,6 @@
     <div class="spdisp">
       <h3>Description</h3>
       <p class="spinfo">{{ sub_product.description }}</p>
-    </div>
-    <div class="dosagemain">
-      <h3>Application and Dosage</h3>
-      <table class="tabul">
-        <tr>
-          {% if sub_product.Key_1 %}
-          <td>{{ sub_product.Key_1 }}</td>
-          {% endif %} {% if sub_product.Value_1 %}
-          <td>{{ sub_product.Value_1 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_2 %}
-          <td>{{ sub_product.Key_2 }}</td>
-          {% endif %} {% if sub_product.Value_2 %}
-          <td>{{ sub_product.Value_2 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_3 %}
-          <td>{{ sub_product.Key_3 }}</td>
-          {% endif %} {% if sub_product.Value_3 %}
-          <td>{{ sub_product.Value_3 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_4 %}
-          <td>{{ sub_product.Key_4 }}</td>
-          {% endif %} {% if sub_product.Value_4 %}
-          <td>{{ sub_product.Value_4 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_5 %}
-          <td>{{ sub_product.Key_5 }}</td>
-          {% endif %} {% if sub_product.Value_5 %}
-          <td>{{ sub_product.Value_5 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_6 %}
-          <td>{{ sub_product.Key_6 }}</td>
-          {% endif %} {% if sub_product.Value_6 %}
-          <td>{{ sub_product.Value_6 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_7 %}
-          <td>{{ sub_product.Key_7 }}</td>
-          {% endif %} {% if sub_product.Value_7 %}
-          <td>{{ sub_product.Value_7 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_8 %}
-          <td>{{ sub_product.Key_8 }}</td>
-          {% endif %} {% if sub_product.Value_8 %}
-          <td>{{ sub_product.Value_8 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_9 %}
-          <td>{{ sub_product.Key_9 }}</td>
-          {% endif %} {% if sub_product.Value_9 %}
-          <td>{{ sub_product.Value_9 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_10 %}
-          <td>{{ sub_product.Key_10 }}</td>
-          {% endif %} {% if sub_product.Value_10 %}
-          <td>{{ sub_product.Value_10 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_11 %}
-          <td>{{ sub_product.Key_11 }}</td>
-          {% endif %} {% if sub_product.Value_11 %}
-          <td>{{ sub_product.Value_11 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_12 %}
-          <td>{{ sub_product.Key_12 }}</td>
-          {% endif %} {% if sub_product.Value_12 %}
-          <td>{{ sub_product.Value_12 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_13 %}
-          <td>{{ sub_product.Key_13 }}</td>
-          {% endif %} {% if sub_product.Value_13 %}
-          <td>{{ sub_product.Value_13 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_14 %}
-          <td>{{ sub_product.Key_14 }}</td>
-          {% endif %} {% if sub_product.Value_14 %}
-          <td>{{ sub_product.Value_14 }}</td>
-          {% endif %}
-        </tr>
-        <tr>
-          {% if sub_product.Key_15 %}
-          <td>{{ sub_product.Key_15 }}</td>
-          {% endif %} {% if sub_product.Value_15 %}
-          <td>{{ sub_product.Value_15 }}</td>
-          {% endif %}
-        </tr>
-      </table>
     </div>
     <!-- //////////////////////////FOOTER//////////////////////// -->
     <footer style="margin-left: 0px" class="footer">
@@ -275,6 +166,10 @@
             <li>
               <i class="material-icons">phone</i>
               <a href="tel:+91-8277078435">+91-8277078435</a>
+            </li>
+            <li>
+              <i class="material-icons">phone</i>
+              <a href="tel:+91-8277078435">080-24484173</a>
             </li>
           </ul>
         </div>

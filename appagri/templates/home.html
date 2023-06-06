@@ -6,10 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% for i in keys %}
-    <meta name="keywords" content="{{ i.key }}">
-    {% endfor %}
-    {% for i in meta %}
-    <meta name="meta" content="{{ i.meta }}">
+    <meta name="keywords" content="{{ i.key }}" />
+    {% endfor %} {% for i in meta %}
+    <meta name="description" content="{{ i.meta }}" />
     {% endfor %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
@@ -188,32 +187,57 @@
         {% endfor %}
 
         <!-- ///////////////////End Main information////////////////// -->
-        <!-- ///////////////////////SUB PRODUCT CARDS/////////////////////////// -->
-        {% if sub_products %}
-        <h3 class="hhedding">Related Products</h3>
-        <div class="subpcard">
-          {% for sub_product in sub_products %}
-          <div class="spcard">
-            <a
-              href="{% url 'appagri:sub_product_details' sub_product.name|slugify sub_product.id %}"
-            >
-              <p class="spdiscout">-{{ sub_product.off }} OFF</p>
-              <img src="{{ sub_product.spimage.url }}" alt="" />
-              <div class="spindiv">
-                <strong>{{ sub_product.name }}</strong>
-                <p style="font-weight: 500">₹{{ sub_product.price }}</p>
+        <!-- //////////////////products/////////////////////// -->
+        <h3 class="hhedding">OUR PRODUCT VARIENTS</h3>
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 col-md-6 col-sm-6 col-sm-offset-3">
+              <div class="main-wrapper">
+                <ul class="listOfassignment">
+                  {% for sub_product in sub_products %}
+                  <li>
+                    <div class="spcard">
+                      <a
+                        href="{% url 'appagri:sub_product_details' sub_product.name|slugify sub_product.id %}"
+                      >
+                        <p class="spdiscout">-{{ sub_product.off }} OFF</p>
+                        <img src="{{ sub_product.spimage.url }}" alt="" />
+                        <div class="spindiv">
+                          <strong>{{ sub_product.name }}</strong>
+                          <p style="font-weight: 500">
+                            ₹{{ sub_product.price }}
+                          </p>
+                        </div>
+                        <div class="spindivtwo">
+                          <p class="spviewmore">View more</p>
+                          <p
+                            style="
+                              text-decoration: line-through;
+                              font-size: 14px;
+                            "
+                          >
+                            ₹{{ sub_product.discount }}
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <div class="sld-btn text-center">
+                  <button class="btn btn-primary prv" type="submit">
+                    Prev
+                  </button>
+                  <ul class="pagenation"></ul>
+                  <button class="btn btn-primary pull-right next" type="submit">
+                    Next
+                  </button>
+                </div>
               </div>
-              <div class="spindivtwo">
-                <p class="spviewmore">View more</p>
-                <p style="text-decoration: line-through; font-size: 14px">
-                  ₹{{ sub_product.discount }}
-                </p>
-              </div>
-            </a>
+            </div>
           </div>
-          {% endfor %}
         </div>
-        {% endif %}
+        <!-- //////////////////product end//////////////////////// -->
         <!-- //////////////////Web info/////////////////////// -->
         {% for i in webinfo %}
         <div class="webinfomain">
@@ -238,23 +262,46 @@
         </div>
         {% endfor %}
         <!-- //////////////////Web info/////////////////////// -->
-
         <!-- //////////////PRODUCTS////////////////////////// -->
         <h3 class="hhedding">OUR PRODUCTS</h3>
-        <div class="hpmain">
-          {% for product in products %}
-          <div class="hpcard">
-            <a
-              href="{% url 'appagri:product_details' product.name|slugify product.id %}"
-            >
-              <div>
-                <img src="{{ product.image.url }}" alt="" />
+        <div class="containero">
+          <div class="rowo">
+            <div class="col-xs-12 col-md-6 col-sm-6 col-sm-offset-3">
+              <div class="main-wrappero">
+                <ul class="listOfassignmento">
+                  {% for product in products %}
+                  <li>
+                    <div class="hpcard">
+                      <a
+                        href="{% url 'appagri:product_details' product.name|slugify product.id %}"
+                      >
+                        <div>
+                          <img src="{{ product.image.url }}" alt="" />
+                        </div>
+                        <strong>{{ product.name }}</strong>
+                        <p class="spviewmore" style="margin-left: 10px">
+                          View more
+                        </p>
+                      </a>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <div class="sld-btno text-centero">
+                  <button class="btno btn-primaryo prvo" type="submit">
+                    Prev
+                  </button>
+                  <ul class="pagenationo"></ul>
+                  <button
+                    class="btno btn-primaryo pull-righto nexto"
+                    type="submit"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
-              <strong>{{ product.name }}</strong>
-              <p class="spviewmore" style="margin-left: 10px">View more</p>
-            </a>
+            </div>
           </div>
-          {% endfor %}
         </div>
         <!-- ////////////////////PRODUCT END///////////////////// -->
         <h2 class="hhedding">Download our Brouchers</h2>
@@ -370,6 +417,10 @@
               <i class="material-icons">phone</i>
               <a href="tel:+91-8277078435">+91-8277078435</a>
             </li>
+            <li>
+              <i class="material-icons">phone</i>
+              <a href="tel:+91-8277078435">080-24484173</a>
+            </li>
           </ul>
         </div>
 
@@ -475,6 +526,248 @@
         </p>
       </div>
     </footer>
+    <script>
+      $(window).on('load', function () {
+        var NoLi = $('.listOfassignment li').length;
+        console.log(NoLi);
+        no = 0;
+
+        showNoLi = 4;
+
+        if ($(window).width() <= 750) {
+          showNoLi = 2;
+        }
+
+        if ($(window).width() <= 450) {
+          showNoLi = 1;
+        }
+
+        start = 0;
+
+        end = showNoLi;
+
+        var deviedLi = NoLi / showNoLi;
+
+        var arounVal = Math.ceil(deviedLi);
+
+        var counter;
+
+        for (counter = 1; counter <= arounVal; counter++) {
+          $('<li><a href="javascript:void(0)"></a></li>').appendTo(
+            '.pagenation'
+          );
+        }
+
+        $('.pagenation li').eq(0).addClass('active');
+
+        $('.listOfassignment li').slice(start, end).addClass('active');
+
+        $('.prv').prop('disabled', true);
+
+        function myfunction(selectedShow) {
+          return function () {
+            if (selectedShow === 'nextShow') {
+              no++;
+
+              $('.pagenation li').removeClass('active');
+
+              $('.pagenation li').eq(no).addClass('active');
+
+              $('.listOfassignment li').removeClass('active');
+
+              start = showNoLi * no;
+
+              end = showNoLi * no + showNoLi;
+
+              $('.listOfassignment li').slice(start, end).addClass('active');
+
+              $('.prv').prop('disabled', false);
+
+              if (no * showNoLi + showNoLi >= NoLi) {
+                $('.next').prop('disabled', true);
+              }
+            }
+            if (selectedShow === 'pinterclick') {
+              $('.pagenation li').removeClass('active');
+
+              var thisnumber = $(this).addClass('active').index();
+
+              no = thisnumber;
+
+              start = showNoLi * no;
+
+              end = showNoLi * no + showNoLi;
+
+              $('.listOfassignment li').removeClass('active');
+
+              $('.listOfassignment li').slice(start, end).addClass('active');
+
+              if (no > 0) {
+                $('.prv').prop('disabled', false);
+              } else {
+                $('.prv').prop('disabled', true);
+              }
+
+              if (no * showNoLi + showNoLi >= NoLi) {
+                $('.next').prop('disabled', true);
+              } else {
+                $('.next').prop('disabled', false);
+              }
+            } else if (selectedShow === 'prevSelecte') {
+              no--;
+
+              $('.pagenation li').removeClass('active');
+
+              $('.pagenation li').eq(no).addClass('active');
+
+              $('.listOfassignment li').removeClass('active');
+
+              start = showNoLi * no;
+
+              end = showNoLi * no + showNoLi;
+
+              $('.listOfassignment li').slice(start, end).addClass('active');
+
+              $('.next').prop('disabled', false);
+
+              if (no === 0) {
+                $('.prv').prop('disabled', true);
+              }
+            }
+          };
+        }
+
+        $('.next').on('click', myfunction('nextShow'));
+
+        $('.prv').on('click', myfunction('prevSelecte'));
+
+        $('.pagenation').on('click', 'li', myfunction('pinterclick'));
+      });
+      /* /////////////////////////////////////////////////////////end/////////////////////////////////////// */
+
+      $(window).on('load', function () {
+        var NoLio = $('.listOfassignmento li').length;
+        console.log(NoLio);
+        no = 0;
+
+        showNoLio = 4;
+
+        if ($(window).width() <= 750) {
+          showNoLio = 2;
+        }
+
+        if ($(window).width() <= 450) {
+          showNoLio = 1;
+        }
+
+        starto = 0;
+
+        endo = showNoLio;
+
+        var deviedLio = NoLio / showNoLio;
+
+        var arounValo = Math.ceil(deviedLio);
+
+        var countero;
+
+        for (countero = 1; countero <= arounValo; countero++) {
+          $('<li><a href="javascript:void(0)"></a></li>').appendTo(
+            '.pagenationo'
+          );
+        }
+
+        $('.pagenationo li').eq(0).addClass('activeo');
+
+        $('.listOfassignmento li').slice(starto, endo).addClass('activeo');
+
+        $('.prvo').prop('disabled', true);
+
+        function myfunction(selectedShowo) {
+          return function () {
+            if (selectedShowo === 'nextShowo') {
+              no++;
+
+              $('.pagenationo li').removeClass('activeo');
+
+              $('.pagenationo li').eq(no).addClass('activeo');
+
+              $('.listOfassignmento li').removeClass('activeo');
+
+              starto = showNoLio * no;
+
+              endo = showNoLio * no + showNoLio;
+
+              $('.listOfassignmento li')
+                .slice(starto, endo)
+                .addClass('activeo');
+
+              $('.prvo').prop('disabled', false);
+
+              if (no * showNoLio + showNoLio >= NoLio) {
+                $('.nexto').prop('disabled', true);
+              }
+            }
+            if (selectedShowo === 'pinterclicko') {
+              $('.pagenationo li').removeClass('activeo');
+
+              var thisnumbero = $(this).addClass('activeo').index();
+
+              no = thisnumbero;
+
+              starto = showNoLio * no;
+
+              endo = showNoLio * no + showNoLio;
+
+              $('.listOfassignmento li').removeClass('activeo');
+
+              $('.listOfassignmento li')
+                .slice(starto, endo)
+                .addClass('activeo');
+
+              if (no > 0) {
+                $('.prvo').prop('disabled', false);
+              } else {
+                $('.prvo').prop('disabled', true);
+              }
+
+              if (no * showNoLio + showNoLio >= NoLio) {
+                $('.nexto').prop('disabled', true);
+              } else {
+                $('.nexto').prop('disabled', false);
+              }
+            } else if (selectedShowo === 'prevSelecteo') {
+              no--;
+
+              $('.pagenationo li').removeClass('activeo');
+
+              $('.pagenationo li').eq(no).addClass('activeo');
+
+              $('.listOfassignmento li').removeClass('activeo');
+
+              starto = showNoLio * no;
+
+              endo = showNoLio * no + showNoLio;
+
+              $('.listOfassignmento li')
+                .slice(starto, endo)
+                .addClass('activeo');
+
+              $('.nexto').prop('disabled', false);
+
+              if (no === 0) {
+                $('.prvo').prop('disabled', true);
+              }
+            }
+          };
+        }
+
+        $('.nexto').on('click', myfunction('nextShowo'));
+
+        $('.prvo').on('click', myfunction('prevSelecteo'));
+
+        $('.pagenationo').on('click', 'li', myfunction('pinterclicko'));
+      });
+    </script>
   </body>
   <script src="{% static 'js/script.js' %}"></script>
 </html>

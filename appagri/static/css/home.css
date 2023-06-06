@@ -74,8 +74,10 @@
 }
 .hpcard a div img {
   max-width: 100%;
-  height: 228px;
+  height: 220px;
+  width: 220px;
 }
+
 .spviewmore {
   border: 3px double #32a1ce;
   color: black;
@@ -594,7 +596,180 @@ li a {
     flex: 2 0px;
   }
 }
+/* //////////////swiper//////////// */
+ul {
+  margin: 0;
+  padding: 0;
+}
+ul li {
+  list-style: none;
+}
+.listOfassignment {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 265px;
+}
+ul.listOfassignment li a {
+  padding: 10px 10px;
+  display: block;
+  border-radius: 10px;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 15px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.pull-right {
+  background: #215d0e;
+  color: #ffc100;
+  padding: 10px 15px;
+  clip-path: polygon(
+    0% 20%,
+    60% 20%,
+    60% 0%,
+    100% 50%,
+    60% 100%,
+    60% 80%,
+    0% 80%
+  );
+}
+.listOfassignment li {
+  display: none;
+}
+.listOfassignment li.active {
+  display: block;
+  width: 240px;
+  height: 240px;
+}
+.prize {
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  padding: 5px 15px;
+  color: #fff;
+  -webkit-clip-path: polygon( 0 0, 0 0, 100% 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 100% );
+  clip-path: polygon( 0 0, 0 0, 100% 0, 100% 0, 100% calc(100% - 15px), calc(100% - 17px) 100%, 15px 100%, 0 100% );
+  height: 28px;
+  font-size: 0.7rem;
+  line-height: 14px;
+  letter-spacing: 1.2px;
+  transition: 0.2s 0.1s;
+  background-image: linear-gradient(90deg, #08ba00, #215d0e);
+  border: 0 solid;
+  overflow: hidden;
+  display: initial;
+}
+.prize-main {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  padding: 10px;
+}
+button.btn.btn-primary.prv {
+  float: left;
+  background: #215d0e;
+  color: #ffc100;
+  padding: 10px 15px;
+  clip-path: polygon(
+    40% 0%,
+    40% 20%,
+    100% 20%,
+    100% 80%,
+    40% 80%,
+    40% 100%,
+    0% 50%
+  );
+}
 
+ul.pagenation {
+  display: inline-block;
+  margin: 20px 0 0;
+}
+ul.pagenation li {
+  display: inline-block;
+  margin: 0 3px;
+}
+ul.pagenation li a {
+  width: 15px;
+  height: 15px;
+  background: green;
+  display: inline-block;
+  border-radius: 100px;
+}
+ul.pagenation li.active a {
+  background: #673ab7;
+}
+
+/* /////////////////////////////////////////////////////////end/////////////////////////////////////// */
+
+ul{
+	margin: 0;
+	padding:0;
+}
+ul li{
+	list-style: none;
+}
+ul.listOfassignmento li a {
+    padding: 10px 10px;
+    display: block;
+    margin: 10px 0;
+    text-decoration: none;
+    font-size: 15px;
+    color: #fff;
+}
+.listOfassignmento {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 355px;
+}
+.listOfassignmento li{
+    display: none;
+}
+.listOfassignmento li.activeo{
+	display: block;
+}
+button.btno.btn-primaryo.prvo {
+  float: left;
+  background: #215d0e;
+  color: #ffc100;
+  padding: 10px 15px;
+  clip-path: polygon( 40% 0%, 40% 20%, 100% 20%, 100% 80%, 40% 80%, 40% 100%, 0% 50% );
+}
+.pull-righto {
+  float: right;
+}
+.text-centero {
+  text-align: center;
+}
+.pull-righto {
+  background: #215d0e;
+  color: #ffc100;
+  padding: 10px 15px;
+  clip-path: polygon( 0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80% );
+}
+ul.pagenationo {
+    display: inline-block;
+    margin: 20px 0 0;
+}
+ul.pagenationo li {
+    display: inline-block;
+    margin: 0 3px;
+}
+ul.pagenationo li a {
+    width: 15px;
+    height: 15px;
+    background: green;
+    display: inline-block;
+    border-radius: 100px;
+}
+ul.pagenationo li.activeo a {
+    background: #673AB7;
+}
+/* /////////////swiper end//////////// */
 /* //////////////FOOTER END////////////////////// */
 /* //////////mobile response//////// */
 @media only screen and (max-width: 450px) {

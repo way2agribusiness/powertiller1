@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-qda2g=njwc1ern=9amy!4=2v_iea3c$w%j41+-p(ili%a62yml
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.urbanagriculture.in', 'urbanagriculture.in']
+ALLOWED_HOSTS = ['www.powertiller.in', 'powertiller.in']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -75,9 +75,9 @@ WSGI_APPLICATION = 'clinic.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'urban_agriculture',
-        'USER': 'urban',
-        'PASSWORD': 'AVNS_5ha1MfzHBjiRDafWRec',
+        'NAME': 'powertiller',
+        'USER': 'tiller',
+        'PASSWORD': 'AVNS_UVEOt0tn89ioxyzgirH',
         'HOST': 'way2agribusiness-mysql-do-user-13941505-0.b.db.ondigitalocean.com',
         'PORT': '25060'
     }

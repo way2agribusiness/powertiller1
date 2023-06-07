@@ -11,6 +11,7 @@
   margin-left: 20%;
 }
 .containerone {
+  margin: 1% 5%;
   display: flex;
 }
 #sidebarview {
@@ -64,7 +65,7 @@
   margin: 5px;
 }
 .containerone div img {
-  width: 450px;
+  width: 415px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   margin: 10px;
@@ -78,11 +79,12 @@
   border-radius: 10px;
 }
 .subpcard {
+  background: #dddddd;
   flex-wrap: wrap;
   display: flex;
   gap: 10px;
   justify-content: center;
-  background-color: #ffc100;
+
 }
 .subpcard div {
   width: 255px;
@@ -122,20 +124,19 @@
   text-decoration: underline;
 }
 .hpmain {
-  background-color: #215d0e;
   padding-bottom: 10px;
 }
 .hpcard {
   background-color: #fff;
 }
 .spinfo {
+  padding: 20px;
   margin-right: 2%;
   color: #215f0ec7;
   text-align: justify;
-  font-size: 15px;
+  font-size: 16px;
 }
 .pheddings {
-  border-bottom: 2px solid;
   font-size: 20px;
   display: inline-block;
   font-weight: 500;
@@ -211,7 +212,6 @@
   margin: 5px;
   background: green;
   font-size: 16px;
-  font-weight: 500;
   border-radius: 5px;
   color: white;
 }
@@ -273,6 +273,9 @@
 .fchange {
   margin-left: 20%;
 }
+
+
+
 /* ////////PULSE ANIMATION/////////// */
 .pulse {
   font-size: 17px;
@@ -342,8 +345,15 @@
   .inbody {
     margin-left: 0%;
   }
+  .subpcard div {
+    margin: 5px;
+    width: 150px;
+  }
   .subpcard div img {
-    height: 165px;
+    height: 150px;
+  }
+  .subpcard div h3 {
+    padding: 5px 10px;
   }
   .hpcard {
     width: 160px;
@@ -358,7 +368,7 @@
     width: 100%;
   }
   .spinfo {
-    margin: 1% 4%;
+    margin: 1% 2%;
   }
   .pcontent {
     padding: 10px;
@@ -366,5 +376,14 @@
   .containerone div img {
     padding: 10px;
     margin: 0px;
+  }
+  @keyframes shadow-pulse {
+    0% {
+      box-shadow: 0 0 0 0px #ffc100;
+    }
+
+    100% {
+      box-shadow: 0 0 0 5px rgb(0 0 0 / 0%);
+    }
   }
 }

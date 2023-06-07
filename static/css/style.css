@@ -182,7 +182,7 @@ body.dark-mode {
 }
 .spinfo {
   text-align: justify;
-  font-size: 15px;
+  font-size: 16px;
 }
 .webinfomain {
   display: grid;
@@ -190,6 +190,7 @@ body.dark-mode {
   gap: 10px;
   margin: 5%;
 }
+
 .wcontainerone {
   background: linear-gradient(145deg, #007e0a 0%, #c4b700 100%);
   border-radius: 5px;
@@ -443,7 +444,7 @@ header i {
 }
 .wrapper.active header i {
   margin-left: 5px;
-  font-size: 30px;
+  font-size: 20px;
 }
 /* .wrapper .input-part {
   margin: 20px 25px 30px;
@@ -1077,6 +1078,9 @@ article img {
   .card-info {
     overflow: scroll;
     height: 420px;
+  }
+  .dmode {
+    border-radius: 10px;
   }
 }
 /* ////////////End Tab///////////// */

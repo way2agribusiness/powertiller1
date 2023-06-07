@@ -13,7 +13,6 @@ body {
   gap: 10px;
 }
 .spdetails h2 {
-  border-bottom: 2px solid;
   margin: 0;
   display: inline-block;
   font-weight: 500;
@@ -44,7 +43,6 @@ body {
   font-size: 20px;
   font-weight: 500;
   color: #09105e;
-  border-bottom: 2px solid #09105e;
   display: inline-block;
 }
 .prize-main h1 {

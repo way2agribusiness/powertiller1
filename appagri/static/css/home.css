@@ -39,7 +39,6 @@
 }
 .productname {
   text-align: center;
-  padding-bottom: 30px;
 }
 
 /* /////////product name///////// */
@@ -435,7 +434,7 @@ body {
   );
   color: #ffc100;
   justify-content: center;
-  padding: 50px 50px 0px 0px;
+  padding: 30px 50px 0px 0px;
   width: 100%;
   font-size: 25px;
   font-weight: 500;

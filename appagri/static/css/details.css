@@ -11,6 +11,7 @@
   margin-left: 20%;
 }
 .containerone {
+  margin: 1% 5%;
   display: flex;
 }
 #sidebarview {
@@ -64,7 +65,7 @@
   margin: 5px;
 }
 .containerone div img {
-  width: 450px;
+  width: 415px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   margin: 10px;
@@ -133,10 +134,9 @@
   margin-right: 2%;
   color: #215f0ec7;
   text-align: justify;
-  font-size: 15px;
+  font-size: 16px;
 }
 .pheddings {
-  border-bottom: 2px solid;
   font-size: 20px;
   display: inline-block;
   font-weight: 500;
@@ -212,7 +212,6 @@
   margin: 5px;
   background: green;
   font-size: 16px;
-  font-weight: 500;
   border-radius: 5px;
   color: white;
 }

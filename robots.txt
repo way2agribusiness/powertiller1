@@ -1,0 +1,7 @@
+User-Agent: *
+Disallow:
+Disallow: /admin/
+Disallow: /master-console-y746x/
+Allow: /external-links
+
+Sitemap: https://www.powertiller.in/sitemap.xml

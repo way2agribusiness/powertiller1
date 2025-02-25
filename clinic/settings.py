@@ -1,3 +1,4 @@
+
 import os
 from pathlib import Path
 
@@ -5,25 +6,37 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+
+# MEDIA_URL should be the relative URL where media files are accessible
 MEDIA_URL = "/media/"
+
+# MEDIA_ROOT should be the absolute path where media files are stored
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Removed the trailing slash
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qda2g=njwc1ern=9amy!4=2v_iea3c$w%j41+-p(ili%a62yml'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.powertiller.in', 'powertiller.in']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+SECRET_KEY=7#*8w4g10&teet@fla9#ek_samv-=4l7!7t!#10bgt1dr0
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Application definition
 
 INSTALLED_APPS = [
+	'appagri',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,11 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'appagri',
+	'django.contrib.sitemaps',
+    
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'sorl.thumbnail',
+	'cloudinary',
+	'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -46,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', 
 ]
 
 ROOT_URLCONF = 'clinic.urls'
@@ -74,14 +91,11 @@ WSGI_APPLICATION = 'clinic.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'powertiller',
-        'USER': 'tiller',
-        'PASSWORD': 'AVNS_UVEOt0tn89ioxyzgirH',
-        'HOST': 'way2agribusiness-mysql-do-user-13941505-0.b.db.ondigitalocean.com',
-        'PORT': '25060'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # this will create the SQLite file in your project root
     }
 }
+
 
 
 # Password validation
@@ -108,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -118,10 +132,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+STATIC_URL = '/static/'
+
+# The directory where static files will be collected when you run `collectstatic`
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Additional directories where Django will look for static files (e.g., your custom static folder)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # This points to the 'static' folder in the project root
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -146,36 +164,25 @@ AUTHENTICATION_BACKENDS =(
 )
 
 
+cloudinary.config( 
+  cloud_name = "dm71xhdxd", 
+  api_key = "855459367797631", 
+  api_secret = "owidtLZTC0HQngNZBBo-wUzy7CU" ,
+  secure=True,
+)
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtpout.secureserver.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'agriclinic@way2agribusiness.com'
+EMAIL_HOST_PASSWORD = 'Way2abi5*CLINIC'
 
-
-# #!/bin/sh
-
-# NAME='clinic'
-# DJANGODIR=/Urban_agriculture/urban_agriculture/Urban_Agriculture 
-# SOCKFILE=/Urban_agriculture/urban_agriculture/run/gunicorn.sock
-# USER=urban
-# Group=webapps
-# NUM_WORKERS=3
-# DJANGO_SETTINGS_MODULE=clinic.settingsprod
-# DJANGO_WSGI_MODULE=clinic.wsgi
-# TIMEOUT=120
-
-# cd $DJANGODIR
-# source ../urban_ev/bin/activate
-# export DJANGO_SETTINGS_MODULE=$DJANGO_SETINGS_MODULE
-# export PYTHONPATH=$DJANGODIR:$PYTHONPATH
-
-# RUNDIR=$(dirname $SOCKFILE)
-# test -d $RUNDIR || mkdir -p $RUNDIR
-
-# exec ../urban_env/bin/gunicorn $(DJANGO_WSGI_MODULE):application \
-# --name $NAME \
-# --workers $NUM_WORKERS \
-# --timeout $TIMEOUT \
-# --user=$USER \
-# --group=GROUP \
-# --bind=unix:$SOCKFILE \
-# --log-level=debug \
-# --log=file=-
-
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}

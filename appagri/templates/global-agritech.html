@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'css/aboutuspg2.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/intech.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sp123.css' %}" />
+  	<title>Power Tiller | Global Agritech | {{title}}</title>
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+  <div class="intech">
+    <br>
+    <button class="seller-btn" onclick="scrollToSection()"><i class="material-icons">pan_tool_alt</i>Reach Out to Indian Farmers</button>
+    <br><br>
+    <div class="intro-intech">
+      {% for i in intro %}
+        <h1>{{i.title}}</h1>
+        <br><br>
+        <p id="long-text">{{i.intro_text}}</p>
+      {% endfor %}
+    </div>
+    <br><hr><br>
+    <header >
+      <ul id="tabs" onclick="scrollToSection1()">
+        {% for country in countries %}
+          <li class="country-list" name="{{country}}" id ="{{country | slugify}}" onclick="clikToOpen(event)">{{country}} Agritech Products</li>
+        {% endfor %}
+      </ul>
+    </header>
+    <br>
+    {% load custom_filters %}
+    <div class="country-div">
+      {% if selected_country %}
+        <div id="{{selected_country.country.country_slug}}_div" class="selected-category">
+          <h3>{{selected_country.category_title}}-{{selected_country.country.country}}</h3>
+          <p id="long-text">{{selected_country.category_intro}}</p>
+          <ul class="product-class" id="{{country}}-list">
+            {% for category in agritech_categories %}
+              {% if category|slugify == selected_category.category_slug %}
+                <a href="{% url 'appagri:global-agritech-country-category' selected_country.country.country_slug selected_category.category_slug %}"><li id="{{selected_category.category_name}}-{{selected_country.country.country}}" name="{{selected_category.category_name}}" class="selected-product-category">{{selected_category.category_name}}</li></a>
+              {% else %}
+                <a href="{% url 'appagri:global-agritech-country-category' selected_country.country.country_slug category|slugify %}"><li id="{{category}}-{{selected_country.country.country}}" name="{{category}}" class="product-category">{{category}}</li></a>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          {% if products %}
+            <div class="products">
+              {% for product in products %}
+                <div class="product">
+                  <img src="{{product.product_image.url}}" alt="{{product.alt}}" loading="lazy">
+                  <div style="display:flex; justify-content: space-between;">
+                    <span>{{product.product_name | capfirst}}</span>
+                    <strong class="seller-name" id="{{product.seller_name}}_{{forloop.counter}}">{{product.seller_name}}</strong>
+                  </div>
+                  {% if product.product_name in rate_product %}
+                    {% with avg_rating=rate_product|get_from_dict:product.product_name %}
+                      <p class="rate"><strong style="display:flex;"><i class="material-icons">star</i>{{ avg_rating }}</strong></p>
+                    {% endwith %}
+                  {% endif %}
+                  <p id="product-desc">{{ product.product_text|urlize|safe }}</p>
+                	<div class="overlay-box" id="{{product.seller_name}}_{{forloop.counter}}">
+                    	<div class="full-seller-details-container" style="display:none">
+                        	<i class="material-icons" id="{{product.seller_name}}_{{forloop.counter}}-i">close</i>
+                        	<div>
+                          		<center><h4>{{product.seller_name}}</h4></center>
+                          		<p>{{product.seller_details}}</p>
+                        	</div>
+                    	</div>
+                  	</div>
+                  <div class="buttons">
+                    <div>
+                      <a href="{% url 'appagri:global-tech-feedback' selected_country.country.country_slug selected_category.category_slug product.product_slug %}"><button>Feedback</button></a> 
+                    </div>
+                    <div >
+                      <button>Enquiry</button>
+                      <div class="enq">
+                        <a href="tel:+919449004956"  rel="noopener" target="_blank"><i class="fa fa-phone"></i></a>
+                        <a href="https://wa.me/9449004956"  rel="noopener" target="_blank"><i class="fa fa-whatsapp"></i></a>
+                        <a href="mailto: dr.prasannad@way2agribusiness.com"  rel="noopener" target="_blank"><i class="fa fa-envelope"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <br><hr><br>
+        </div>
+      {% endif %}
+      {% for country, category  in country_categories.items %}
+        <div id="{{country | slugify}}_div" class="category">
+          <h3>{{category.category_title}}-{{country}}</h3>
+          <p id="long-text">{{category.category_intro}}</p>
+          <ul class="product-class" id="{{country}}-list">
+            {% for category in agritech_categories %}
+              <a href="{% url 'appagri:global-agritech-country-category' country|slugify category|slugify %}"><li id="{{category}}-{{country}}" name="{{category}}">{{category}}</li></a>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+    <br>
+    <section id="target-section1">
+      <div class="intro-intech">
+          <h1>{{roadmaps.roadmap_title}}</h1>
+          <br><br>
+          <img src="{{roadmaps.ppt.url}}" alt="{{roadmaps.alt}}" loading="lazy">
+      </div>
+      <br id="target-section"><br>
+      <br >
+      <br >
+      <h4 class="scale" >Start to Scale Up <span>(Fill Out by International Agritech Companies)</span></h4>
+      <form method="POST" enctype="multipart/form-data" class="seller-form">
+        <br>
+        {% csrf_token %}
+        <p style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align:center;" id="all">All <strong style="color:red">*</strong> marked fields are mandatory</p>
+        {% if message %}<center><p class="message">{{message}}</p></center>{% endif %}<br>
+            {% for field in form %}
+              {% if field.id_for_label == 'id_seller_product_avail_india' %}
+                <div id="{{field.id_for_label}}-div">
+                  {% if field.field.required %}
+                    <label>{{field.label}}</label><span style="color: red;padding:0.2rem 0.8rem; font-weight:bold;font-size:1.1rem">*</span>
+                    {{field}}
+                  {% else %}
+                    <label>{{field.label}}</label>
+                    {{field}}
+                  {% endif %}
+                </div>
+              {% else %}
+            {% if field.field.required %}
+                    {{field}}<span style="color: red;padding:0.2rem 0.8rem; font-weight:bold;font-size:1.1rem">*</span>
+            {% else %}
+              {{field}}
+            {% endif %}
+              {% endif %}<br><br>
+            {% endfor %}
+            <center><h4 class="upload">Upload Your Product Images</h4></center><br>
+            <div id="form-count">{{ image_formset.management_form }}</div>
+            <div id="plot-forms">
+              {% for form in image_formset %}
+                {% for field in form %}
+                  <div class="input">{{field}}<i class="material-icons" id="close-{{field.id_for_label}}" style="display:none" onclick="deleteImage(event)">close</i></div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+            <br>
+            <button type="button" id="add-plot-form" onclick="addImage()" >Add New Product Image</button>
+            <br><br><br>
+        <center><button>Submit</button></center>
+        <br>
+      </form>
+    </section>
+  </div>
+  <script async src="{% static 'js/global-agritech.js' %}"></script>
+	<script>
+		const productDesc = document.querySelectorAll('#product-desc');
+      	productDesc.forEach(desc =>{
+        	for (let i=0; i<desc.children.length; i++){
+          		desc.children[i].setAttribute('target','_blank');
+          		desc.children[i].setAttribute('rel','noopener');
+        	}
+      	});
+	</script>
+{% endblock %}

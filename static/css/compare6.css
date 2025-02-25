@@ -1,0 +1,125 @@
+.compare-product{
+  display:block;
+  width:95%;
+  margin: auto;
+}
+.compare-product div img{
+  width:100px;
+  margin: auto;
+}
+.compare-product div p{
+  color:darkgreen;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size:15px;
+  text-align: center;
+}
+.add-new-product img{
+  background-color:gray;
+  border-radius:10px;
+}
+.specs-cols{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap:20px;
+}
+.specs-cols h5{
+  font-weight:bold;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.compare-specs{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap:1rem;
+	padding:1rem;
+}
+.compare-specs h5{
+	font-weight:bold;
+  	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	word-wrap:break-word;
+	overflow-wrap:break-word;
+}
+#cmp{
+  width:50%;
+  margin:auto;
+}
+#cmp button{
+  background-color:darkgreen;
+  color:#ffc100;
+  padding:5px 310px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size:16px;
+  border-radius:30px;
+  box-shadow:0 2px 5px black;
+  font-weight:bold;
+  text-shadow:1px 2px 2px black;
+}
+.all-product{
+  display:flex;
+  justify-content: space-evenly;
+}
+#mrp{
+  text-decoration: line-through;
+  color:gray;
+}
+.products p{
+  text-align:center;
+  color:darkgreen;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: bold;
+}
+.products img{
+  width:150px;
+  height:150px;
+}
+.products button{
+  background-color:#215d0e;
+  box-shadow:0 2px 5px black;
+  color:white;
+  padding:3px 20px;
+  text-align:center;
+  border-radius:5px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+#dropdwn1, #dropdwn2{
+    font-size: 13px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    width: 150px;
+    margin: auto;
+    display: flex;
+	border: 1px solid goldenrod;
+    color: darkgreen;
+}
+#remove-icon1,
+#remove-icon2{
+  float:right;
+  display:none;
+  cursor: pointer;
+}
+@media only screen and (max-width: 768px){
+  	.specs-cols h2{
+    	font-size:12px;
+    	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  	}
+  	#price{
+    	display:block;
+  	}
+  	.specs-cols h5{
+    	font-size:12px;
+  	}
+  	#dropdwn1,#dropdwn2{
+    	width:70px;
+    	font-size:0.5em;
+    	border: 1px solid goldenrod;
+        color: darkgreen;
+  	}
+  	.specs-cols h5{
+  		font-size:10px;
+  	}
+	.compare-specs h5{
+    	font-size:0.6rem;
+	}
+	.compare-product div p{
+    	font-size:0.6rem;
+	}
+}

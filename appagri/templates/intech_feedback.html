@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/sp123.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/aboutuspg2.css' %}" />
+    <title>Power Tiller | Global Tech Feedback Form</title>
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<br>
+	<button class="back-btn"><a href="{% url 'appagri:intech' %}">Back</a></button> 
+	<h2 class="review-title">Global Agritech Product Feedback</h2>
+    <form method="POST" class="popup-form" id="myForm" >
+        {% csrf_token %}
+        <p style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align:center;" id="all">All <strong style="color:red">*</strong> marked fields is mandatory to input</p>
+    	{% if error_message %}<center><p class="message">{{error_message}}</p></center>{% endif %}<br>
+            {% for field in form %}
+                {{field}}<br><br>
+            {% endfor %}
+        <button>Submit Feedback</button>
+    </form>
+     
+	<br>
+{% endblock %}

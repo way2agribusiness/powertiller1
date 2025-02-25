@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-onfarm {
+    background-image: url('https://res.cloudinary.com/dq7vggsop/image/upload/v1717147110/ucxy9gyrqgtbyseyhxuj.jpg');
+  }
+  
+  .bg-offfarm {
+    background-image: url('https://res.cloudinary.com/dq7vggsop/image/upload/v1717147109/dwlcuqjqdfu0u2sneyog.jpg');
+  }

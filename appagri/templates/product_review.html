@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/sp123.css' %}" />
+  	<link rel="stylesheet" href="{% static 'css/home12.css' %}" />
+  	<link rel="stylesheet" href="{% static 'css/aboutuspg2.css' %}" />
+    <title>Power Tiller | Rating and Review | {{sub_product.name}} | {{title}} </title>
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<br>
+    <button class="back-btn"><a href="{% url 'appagri:sub_product_details' sub_product.product|slugify sub_product.slug %}">Back</a></button>
+	<h2 class="review-title">Product Rating & Review Form</h2>
+    <form method="POST" class="popup-form" id="myForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align:center;" id="all">All <strong style="color:red">*</strong> marked fields is mandatory to input</p>
+        {% if message %}<p class="message">{{message}}</p>{% endif %}
+        {% for field in rating_form %}
+            {% if field.id_for_label != 'id_review' and field.id_for_label != 'id_r_image' %}
+                <label id="{{field.id_for_label}}">{{field.label}}</label><span style="color:red">*</span><br>
+            {% else %}
+                <label id="{{field.id_for_label}}">{{field.label}}</label><br>
+            {% endif %}
+            {{field}}<br><br>
+        {% endfor %}
+        <button>Submit Review</button>
+    </form>
+    <br><br>
+{% endblock %}

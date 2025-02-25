@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% for i in logo %}
+      <link rel="icon" type="image/x-icon" href="{{ i.image.url }}" />
+    {% endfor %}
+    <title>Power Tiller | External Links</title>
+</head>
+<body>
+    <div id="backlinks">
+        {% for links in links_list %} 
+            {% for link in links %}
+                <a href="{{ link }}" rel="noopener" target="_blank">{{ link }}</a><br>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</body>
+</html>

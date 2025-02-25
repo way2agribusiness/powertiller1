@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  	<link rel="stylesheet" href="{% static 'css/compare6.css' %}" />
+  	<link rel="stylesheet" href="{% static 'css/aboutuspg2.css' %}" />
+    <title>Power Tiller | Compare Products {% if title %}| {{title}} {% endif %}</title>
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+ 	<div>
+      <br>
+      <div class="compare-product">
+      	<div class="specs-cols">
+        	<div></div>
+        	<div></div>
+        	{% load custom_filters %}
+      		  <form id="form1" method="POST" name="form1">
+              {% csrf_token %} 
+              <select id="dropdwn1" name="dropdown1" onchange="submitForm(event)">
+                <option>Add a Product</option>
+              	{% if sub_product.product.slug == 'power-weeder' or sub_product.product.slug == 'power-tiller' %}
+              		{% for pr in pw_pt %}
+                    <option value="{{ pr.name }}">{{ pr.name }}</option>
+                  {% endfor %}
+                {% elif sub_product.product.slug == 'htp-sprayer' or sub_product.product.slug == 'sprayer' %}
+                  {% for pro in sprayers %}
+                    <option value="{{ pro.name }}">{{ pro.name }}-i</option>
+                  {% endfor %}
+              	{% else %}
+              		{% for sub_product1 in sub_products %}
+                      {% if sub_product.product.name == sub_product1.product.name %}
+                    	  <option value="{{ sub_product1.name }}">{{ sub_product1.name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                {% endif %}
+              </select>
+            </form> 
+            <form id="form2" method="POST" name="form2" >
+              {% csrf_token %}
+              <select id="dropdwn2" name="dropdown2" onchange="submitForm1(event)">
+                <option>Add a Product</option>
+                  {% if sub_product.product.name == 'Power Weeder' %}
+              		{% for pr in pw_pt %}
+                      <option value="{{ pr.name }}">{{ pr.name }}</option>
+                    {% endfor %}
+              	 {% elif sub_product.product.slug == 'htp-sprayer' or sub_product.product.slug == 'sprayer' %}
+                    {% for pro in sprayers %}
+                      <option value="{{ pro.name }}">{{ pro.name }}-i</option>
+                    {% endfor %}
+              	 {% else %}
+              		{% for sub_product1 in sub_products %}
+                      {% if sub_product.product.name == sub_product1.product.name %}
+                    	  <option value="{{ sub_product1.name }}">{{ sub_product1.name }}</option>
+                      {% endif %}
+                    {% endfor %}
+              	{% endif %}
+              </select>
+            </form>
+      	</div>
+      	<br>
+        <div class="specs-cols">
+          <h2 style="font-family:math;font-size:1em; color:darkgreen">Compare <strong>{{sub_product.name}} </strong>vs Others</h2>
+          <div>
+            <img src="{{sub_product.spimage.url}}" alt="{{sub_product.name}}" loading="lazy">
+            <p>{{sub_product.name}}</p>
+          </div>
+          <div class="add-new-product1">
+            <div>
+                <img loading="lazy" id="product-image" src="{{selected_product.spimage.url}}" alt="{{selected_product.name}}">
+                <p id="name1">{{selected_product.name}}</p>
+            </div>
+          </div>
+          <div class="add-new-product">
+            <div>
+              <img loading="lazy" id="product-image1" src="{{selected_product1.spimage.url}}" alt="{{selected_product1.name}}">
+              <p id="name2">{{selected_product1.name}}</p>
+            </div>
+          </div>
+        </div>
+    	  <br>
+    	  <div class="specs-cols">
+        	<div></div>
+        	<div id="price"><p>₹{{sub_product.sales_price}}</p><p id="mrp">₹{{sub_product.mrp}}</p></div>
+        	<div id="price"><p>{% if selected_product.sales_price %}₹{{selected_product.sales_price}}{% endif %}</p><p id="mrp">{% if selected_product.mrp %}₹{{selected_product.mrp}}{% endif %}</p></div>
+        	<div id="price"><p>{% if selected_product1.sales_price %}₹{{selected_product1.sales_price}}{% endif %}</p><p id="mrp">{% if selected_product1.mrp %}₹{{selected_product1.mrp}}{% endif %}</p></div>
+    	  </div>
+        <br>
+        <hr>
+        <br>
+        {% for product, specs in sub_product_specs.items %}
+          {% if product == sub_product.product.name %}
+            {% for key, value in specs.items %}
+              {% if key is not None %}
+                <div class="compare-specs">
+                  <h5>{{key}}</h5>
+                  <p class="value">{% if value is not None %}{{value}}{% else %} ----- {% endif %}</p>
+                    {% for key1, value1 in sub_product_specs1.items %}
+                      {% if key1 == key %}
+                        <p>{% if value1 is not None %}{{value1}}{% else %} ----- {% endif %}</p>
+                      {% endif %}
+                    {% endfor %}
+                    {% for key2, value2 in sub_product_specs2.items %}
+                      {% if key2 == key %}
+                        <p>{% if value2 is not None %}{{value2}}{% else %} ----- {% endif %}</p>
+                      {% endif %}
+                    {% endfor %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+        {% for product, specs in sub_product_specs1.items %}
+          {% if product == sub_product.product.name %}
+            {% for key, value in specs.items %}
+              {% if key is not None %}
+                <div class="compare-specs">
+                  <h5>{{key}}</h5>
+                  <p class="value">{% if value is not None %}{{value}}{% else %} ----- {% endif %}</p>
+                  {% for key1, value1 in sub_product_specs1.items %}
+                    {% if key1 == key %}
+                      <p>{% if value1 is not None %}{{value1}}{% else %} ----- {% endif %}</p>
+                    {% endif %}
+                  {% endfor %}
+                  {% for key2, value2 in sub_product_specs2.items %}
+                    {% if key2 == key %}
+                      <p>{% if value2 is not None %}{{value2}}{% else %} ----- {% endif %}</p>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %} 
+      </div>
+  </div>
+  <br>
+  <script>
+      const navContent = document.querySelector('#content');
+      const mobileMenuIcon = document.querySelector('.material-icons.mobile-menu-icon');
+      if (window.innerWidth <= 800){
+        navContent.style.display = 'none'; 
+        mobileMenuIcon.style.display = 'flex'; 
+      } else {
+        navContent.style.display = 'flex'; 
+        mobileMenuIcon.style.display = 'none'; 
+      }
+  		const currentPath = window.location.pathname;
+    	const navLinks = document.querySelectorAll('.navc2 a');
+    	const mobileMenu = document.getElementById('mobile-menu');
+    	const deskMenu = document.getElementById('menu-mobile');
+    
+    	window.addEventListener('scroll',function(){
+      		deskMenu.style.display = 'none';
+    	});
+   
+    	navLinks.forEach((link) => {
+      		if (link.getAttribute('href') === currentPath) {
+        		link.classList.add('active');
+      		}
+    	});
+    
+    	mobileMenu.addEventListener('click', function () {
+      		if (deskMenu.style.display === 'block') {
+        		deskMenu.style.display = 'none';
+      		} else {
+        		deskMenu.style.display = 'block';
+      		}
+      });
+      for (let i=0; i < navLinks.length;i++){
+        if(navLinks[i].className === 'active'){
+          if (navLinks[i].baseURI === window.location.href){
+              navLinks[i].style.borderBottom = '2px solid darkblue';
+          }
+        }
+      }
+      function submitForm(event) {
+        const form = event.target.form;
+        form.submit();
+      }
+      function submitForm1(event) {
+        const form = event.target.form;
+        form.submit();
+      }
+  </script>
+  <script async src="{% static 'js/script.js' %}"></script>
+{% endblock %}

@@ -1,269 +1,179 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% for i in keys %}
-    <meta name="keywords" content="{{ i.key }}" />
-    {% endfor %} {% for i in meta %}
-    <meta name="description" content="{{ i.meta }}" />
-    {% endfor %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-    <link
-      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
-    {% for i in logo %}
-    <link rel="icon" type="image/x-icon" href="{{ i.image.url }}" />
-    <title>{{ i.name }}</title>
-    {% endfor %}
-  </head>
-  <body>
-    {% for i in link %}
-    <a href="{{ i.external_link }}"></a>
-    {% endfor %}
-    <nav>
-      <div class="navc1">
-        <a href="/">
-          {% for i in logo %}
-          <img src="{{ i.image.url }}" alt="" />
-          <p>{{ i.name }}</p>
-          {% endfor %}
-        </a>
-        <button onclick="mySidebar()" class="pulse" id="sidebarview">
-          Products
-        </button>
-      </div>
-      <div class="navc2" id="content">
-        <button id="mode-toggle" class="dmode">
-          <i class="fa fa-moon-o"></i>
-        </button>
-        <a href="/">Home</a>
-        <a href="">About us</a>
-        <a href="/blogs">Blogs</a>
-        <a href="/contact">Contact us</a>
-        <!-- <button class="button-30" role="button">
-          {% if request.user.is_authenticated %}
-          <i class="material-icons"></i
-          ><a href="{% url 'account_logout' %}">Logout</a>
-          {% else %}
-          <i class="material-icons"></i
-          ><a href="{% url 'account_login' %}">Login</a>
-          {% endif %}
-        </button> -->
-      </div>
-      <div id="menubtn">
-        <button id="toggleBtn"><i class="material-icons">menu</i></button>
-      </div>
-    </nav>
-    <!-- ////////////////////////END NAV////////////////////////////////// -->
+{% block head %}
+  	<link rel="stylesheet" href="{% static 'css/stylespage2.css' %}" />
+  	<link rel="stylesheet" href="{% static 'css/highlight2.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/review.css' %}" />
+    <title>Power Tiller | Home {% if title %}| {{title}} {% endif %}</title>
+	<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showPosition(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Fetch location details from Nominatim API
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
+            headers: {
+                'Accept-Language': 'en'
+                     }
+                })
+            .then(response => response.json())
+            .then(data => {
+              const city = data.address.city || data.address.town || data.address.village;
+              const country = data.address.country;
+              const region = data.address.state;
+              const stateDistrict = data.address.state_district;
+              const district = data.address.county || data.address.district;
+              const county = data.address.county;
+              const postal_code = data.address.postcode;
+
+                // Get CSRF token from the cookies
+                const csrftoken = getCookie('csrftoken');
+
+                // Send the location details to the Django view
+                fetch('/get-location/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        latitude: latitude,
+                        longitude: longitude,
+                        city: city,
+                        country: country,
+                        region: region,
+                        stateDistrict: stateDistrict,
+                        district: district,
+                        county:county,
+                        postal_code: postal_code
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("Location data updated successfully.");
+                    } else {
+                        alert("Failed to get location data.");
+                    }
+                });
+            });
+    }
+
+    function showError(error) {
+        switch(error.code) {
+        case error.PERMISSION_DENIED:
+            if (!sessionStorage.getItem('locationDenied')) {
+              alert("Location access is required for this feature. Please go to your device settings, enable location services, and refresh the page.");
+              sessionStorage.setItem('locationDenied', 'true');
+              setTimeout(getLocation, 86400000); // Ask again after 24 hours
+            }
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            setTimeout(getLocation, 86400000); 
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out. Please try again.");
+            setTimeout(getLocation, 86400000); 
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            setTimeout(getLocation, 86400000); 
+            break;
+        }
+    }
+
+    // Function to get CSRF token from the cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    window.onload = getLocation; // Automatically get location on page load
+</script>
+{% endblock %}
+{% block content %}
     <div class="hpgrid">
-      {% block conten %}
       <div class="sidebar" id="side_bar">
-        <a href="/products" class="shead">
-          <i class="fa fa-cart-arrow-down"></i>
-          <h1>Products</h1>
-          <i class="fa fa-sort-asc"></i>
-        </a>
-        {% for product in products %}
-        <a
-          href="{% url 'appagri:product_details' product.name|slugify product.id %}"
-        >
-          <p class="prashadrop">{{ product.name }}</p>
-        </a>
-        <!-- <hr /> -->
-        {% endfor %}
-        <button class="weatherbtn" onclick="myFunction()">
-          <i class="fa fa-cloud" style="padding-right: 5px"></i>Weather
-        </button>
-      </div>
-      <!-- //////////////////////Weather///////////////////// -->
-      <div class="wrapper" id="myDIV">
-        <header>
-          <i class="bx bx-left-arrow-alt"></i><span>Live Weather</span>
-          <p class="closebtn"><i class="fa fa-close"></i></p>
-        </header>
-        <section class="input-part">
-          <p class="info-txt"></p>
-          <div class="content">
-            <input
-              type="text"
-              spellcheck="false"
-              placeholder="Enter city name"
-              required
-            />
-            <div class="separator"></div>
-            <button>Get Device Location</button>
-          </div>
-        </section>
-        <section class="weather-part">
-          <img class="wdisp" src="" alt="Weather Icon" />
-          <i class="fa fa-cloud"></i>
-          <div class="temp">
-            <span class="numb">_</span>
-            <span class="deg">°</span>C
-          </div>
-          <div class="weather">_ _</div>
-          <div class="location">
-            <i class="bx bx-map"></i>
-            <span>_, _</span>
-          </div>
-          <div class="bottom-details">
-            <div class="column feels">
-              <i class="bx bxs-thermometer"></i>
-              <div class="details">
-                <div class="temp">
-                  <span class="numb-2">_</span>
-                  <span class="deg">°</span>C
+        {% for category in categories %}
+          <h6 class="shead">{{category}}</h6>
+          <div class="category-div">
+            {% for product in products %}
+              {% if category == product.category %}	
+                <div>
+                  <a href="{% url 'appagri:product_details' product.slug %}" rel="noopener">
+                    <p class="prashadrop">{{ product.name }}</p>
+                  </a>
                 </div>
-                <p>Feels like</p>
-              </div>
-            </div>
-            <div class="column humidity">
-              <i class="bx bxs-droplet-half"></i>
-              <div class="details">
-                <span>_</span>
-                <p>Humidity</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-      <!-- //////////////////////Weather end///////////////////// -->
-      <!-- ///////////////////////////////BANNER///////////////////////////////// -->
-      <div class="hbody">
-        <section class="carousel" aria-label="Gallery">
-          <ol class="carousel__viewport">
-            {% for b in banners %}
-            <li id="carousel__slide1" tabindex="0" class="carousel__slide">
-              <img src="{{ b.image.url }}" alt="" />
-              <div class="carousel__snapper"></div>
-            </li>
+              {% endif %}
             {% endfor %}
-          </ol>
-        </section>
-        <!-- ////////////////////////////END BANNER?//////////////////////////////////////// -->
-        <!-- ///////////////////highlights////////////////// -->
-        <div class="hhighlight">
-          {% for i in highlight %}
-          <div>
-            <img src="{{ i.image.url }}" alt="" />
-            <strong>{{ i.text }}</strong>
           </div>
-          {% endfor %}
+        {% endfor %}
+      </div>
+      <div class="hbody">
+        <div class="banner-container">
+          <div class="banner">
+          	{% for i in banners %}
+          		<a href="{% if i.link %}{{i.link}}{% else %}#{% endif %}" target="_blank" rel="noopener"><img src="{{i.image.url}}" alt="{{i.alt}}" loading="lazy"></a>
+          	{% endfor %}
+          </div>
         </div>
-        <!-- ///////////////////End highlights////////////////// -->
-        <!-- ///////////////////Main information////////////////// -->
+      	<br>
+        <div class="hhighlight">
+        	{% for i in highlight %}
+        		<div>
+          			<p>{{i.text1}}</p>
+          			<a href="{{i.link}}" target="_blank" rel="noopener">
+            			<img src="{{ i.image.url }}" alt="{{ i.alt }}" loading="lazy" class="web-image"/>
+          			</a>
+          			<a href="{{i.link}}" target="_blank" rel="noopener">
+            			<strong>{{ i.name }}</strong>
+          			</a>
+          			<section class="link-div"><i class="material-icons">pan_tool_alt</i><a href="{{i.link}}" class="web-link">{{i.link}}</a></section>
+        		</div>
+        	{% endfor %}
+     	</div>
         {% for i in main_info %}
         <div class="infomain">
           <div class="infocontainerone">
             <div style="display: flex; justify-content: center">
-              <img class="imgone" src="{{ i.imageone.url }}" alt="" />
+              <img class="imgone" src="{{ i.imageone.url }}" alt="PowerTiller Info Image 1" loading="lazy"/>
             </div>
-            <div style="display: flex; justify-content: center">
-              <img class="imgtwo" src="{{ i.imagetwo.url }}" alt="" />
-              <img class="imgthree" src="{{ i.imagethree.url }}" alt="" />
+            <div style="display: flex; justify-content: center;gap:65px;margin-top:-90px">
+              <img class="imgtwo" src="{{ i.imagetwo.url }}" alt="PowerTiller Info Image 2" loading="lazy"/>
+              <img class="imgthree" src="{{ i.imagethree.url }}" alt="PowerTiller Info Image 3" loading="lazy"/>
             </div>
           </div>
           <div class="infocontainertwo">
-            <h2 class="hhedding" style="text-align: left; margin-left: 0">
+            <h2 class="hhedding">
               {{ i.hedding }}
             </h2>
-            <p class="spinfo" style="margin-right: 6%">{{ i.information }}</p>
+            <p class="spinfo" id="long-text">{{ i.information }}</p>
+            <p class="spinfo" id="kannada-text">{{ i.Kannada_text  }}</p>
           </div>
         </div>
         {% endfor %}
-
-        <!-- ///////////////////End Main information////////////////// -->
-        <!-- //////////////////products/////////////////////// -->
-        <h3 class="hhedding">OUR PRODUCT VARIENTS</h3>
-        <div class="container">
-          <div class="row">
-            <div class="col-xs-12 col-md-6 col-sm-6 col-sm-offset-3">
-              <div class="main-wrapper">
-                <ul class="listOfassignment">
-                  {% for sub_product in sub_products %}
-                  <li>
-                    <div class="spcard">
-                      <a
-                        href="{% url 'appagri:sub_product_details' sub_product.name|slugify sub_product.id %}"
-                      >
-                        <p class="spdiscout">-{{ sub_product.off }} OFF</p>
-                        <img src="{{ sub_product.spimage.url }}" alt="" />
-                        <div class="spindiv">
-                          <strong>{{ sub_product.name }}</strong>
-                          <p style="font-weight: 500">
-                            ₹{{ sub_product.price }}
-                          </p>
-                        </div>
-                        <div class="spindivtwo">
-                          <p class="spviewmore">View more</p>
-                          <p
-                            style="
-                              text-decoration: line-through;
-                              font-size: 14px;
-                            "
-                          >
-                            ₹{{ sub_product.discount }}
-                          </p>
-                        </div>
-                      </a>
-                    </div>
-                  </li>
-                  {% endfor %}
-                </ul>
-                <div class="sld-btn text-center">
-                  <button class="btn btn-primary prv" type="submit">
-                    Prev
-                  </button>
-                  <ul class="pagenation"></ul>
-                  <button class="btn btn-primary pull-right next" type="submit">
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- //////////////////product end//////////////////////// -->
-        <!-- //////////////////Web info/////////////////////// -->
-        {% for i in webinfo %}
-        <div class="webinfomain">
-          <div class="cardo">
-            <div class="card-img">
-              <img src="{{ i.image.url }}" alt="" />
-            </div>
-            <div class="card-info">
-              <strong class="nice">{{ i.English_hedding }}</strong>
-              <p class="text-body">{{ i.English_text }}</p>
-            </div>
-          </div>
-          <div class="cardo">
-            <div class="card-img">
-              <img src="{{ i.image.url }}" alt="" />
-            </div>
-            <div class="card-info">
-              <strong class="nice">{{ i.Kannada_hedding }}</strong>
-              <p class="text-body">{{ i.Kannada_text }}</p>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-        <!-- //////////////////Web info/////////////////////// -->
-        <!-- //////////////PRODUCTS////////////////////////// -->
-        <h3 class="hhedding">OUR PRODUCTS</h3>
+        <br>
+      	<h3 class="hedding">Agritech Product Categories</h3>
         <div class="containero">
           <div class="rowo">
             <div class="col-xs-12 col-md-6 col-sm-6 col-sm-offset-3">
@@ -272,29 +182,26 @@
                   {% for product in products %}
                   <li>
                     <div class="hpcard">
-                      <a
-                        href="{% url 'appagri:product_details' product.name|slugify product.id %}"
-                      >
+                      <a href="{% url 'appagri:product_details' product.slug %}" rel="noopener">
                         <div>
-                          <img src="{{ product.image.url }}" alt="" />
+                          <img src="{{ product.image.url }}" alt="{{product.name}}" loading="lazy" />
                         </div>
-                        <strong>{{ product.name }}</strong>
-                        <p class="spviewmore" style="margin-left: 10px">
-                          View more
-                        </p>
+                        <div class="spindivone">
+                          <strong>{{ product.name }}</strong>
+                          <p class="spviewmore" style="margin-left: 10px">View</p>
+                        </div>
                       </a>
                     </div>
                   </li>
                   {% endfor %}
                 </ul>
                 <div class="sld-btno text-centero">
-                  <button class="btno btn-primaryo prvo" type="submit">
+                  <button class="btno btn-primaryo prvo" type="submit" style="font-family:'Times New Roman', Times, serif">
                     Prev
                   </button>
-                  <ul class="pagenationo"></ul>
                   <button
                     class="btno btn-primaryo pull-righto nexto"
-                    type="submit"
+                    type="submit" style="font-family:'Times New Roman', Times, serif"
                   >
                     Next
                   </button>
@@ -303,40 +210,85 @@
             </div>
           </div>
         </div>
-        <!-- ////////////////////PRODUCT END///////////////////// -->
-        <h2 class="hhedding">Download our Brouchers</h2>
+        <h3 class="hedding">Agritech Products</h3>
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 col-md-6 col-sm-6 col-sm-offset-3">
+              <div class="main-wrapper">
+                <ul class="listOfassignment">
+                  {% for sub_product in sub_products %}
+                  <li>
+                    <div class="spcard">
+                      <a href="{% url 'appagri:sub_product_details' sub_product.product|slugify sub_product.slug %}" rel="noopener">
+                        <p class="spdiscout">-{{ sub_product.total }}% OFF</p>
+                        <img src="{{ sub_product.spimage.url }}" alt="{{sub_product.name}}" loading="lazy"/>
+                        <div class="spindiv">
+                          <strong title="{{ sub_product.name }}">{{ sub_product.name }}</strong>
+                        </div>
+                        <div class="spindivone">
+                          <p>₹{{ sub_product.sales_price }}</p>
+                          <em>₹{{ sub_product.mrp }}</em>
+                        </div>
+                      </a>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+                <div class="sld-btn text-center">
+                  <button class="btn btn-primary prv" type="submit" style="font-family:'Times New Roman', Times, serif">
+                    Prev
+                  </button>
+                  <button class="btn btn-primary pull-right next" type="submit" style="font-family:'Times New Roman', Times, serif">
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  		<br><br><br>
+        {% if featured_data %}
+          <h2 class="hedding">Farmer's Choice</h2>
+          <div class="featured-list">
+            <div class="featured-container">
+              <div class="featured-div">
+                {% for feature in featured_data %}
+                  <img src="{{feature.featured_img}}" alt="{{feature.featured_alt}}" loading="lazy" class="photos"  onclick="displayFullImage('{{ feature.featured_img }}', '{{ feature.featured_alt }}')">
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        <h2 class="hedding">Download Brochures</h2>
         <div id="wrapo">
-          <a href="/static/pdf/Way2Agritech_Brochure.pdf" class="btn-slide2">
+          <a href="https://res.cloudinary.com/dm71xhdxd/image/upload/v1696050438/Static%20Images/brochures/Way2Agritech_1_gsmqpx.pdf" class="btn-slide2" target="_blank" rel="noopener">
             <span class="circle2"><i class="fa fa-download"></i></span>
             <span class="title2">Download</span>
-            <span class="title-hover2">Click here</span>
+            <span class="title-hover2">Way2Agritech Brochure</span>
           </a>
-          <a href="/static/pdf/Way2Agritech_DSH (1).xlsx" class="btn-slide2">
+          <a href="https://res.cloudinary.com/dm71xhdxd/image/upload/v1696050496/Static%20Images/brochures/Way2Foods_tntqcj.pdf" class="btn-slide2" target="_blank" rel="noopener">
             <span class="circle2"><i class="fa fa-download"></i></span>
             <span class="title2">Download</span>
-            <span class="title-hover2">Click here</span>
+            <span class="title-hover2">Way2Foods Brochure</span>
           </a>
-          <a href="/static/pdf/Way2Agritech_ppt (1).pdf" class="btn-slide2">
+          <a href="#" class="btn-slide2" target="_blank" rel="noopener">
             <span class="circle2"><i class="fa fa-download"></i></span>
             <span class="title2">Download</span>
-            <span class="title-hover2">Click here</span>
+            <span class="title-hover2">Way2ABI Brochure</span>
           </a>
         </div>
-        <!-- //////////////End Brochers///////////// -->
-
-        <!-- ////////////////Brands//////////////////// -->
-        <h2 class="hhedding">Collabration</h2>
+        <h2 class="hedding">Collaboration</h2>
         <article class="wrappero">
           <div class="marquee">
             <div class="marquee__group">
               {% for i in brands %}
-              <img src="{{ i.image.url }}" alt="" />
+              <img src="{{ i.image.url }}" alt="{{i.image.name}}" loading="lazy"/>
               {% endfor %}
             </div>
 
             <div class="marquee__group">
               {% for i in brands %}
-              <img src="{{ i.image.url }}" alt="" />
+              <img src="{{ i.image.url }}" alt="{{i.image.name}}" loading="lazy"/>
               {% endfor %}
             </div>
           </div>
@@ -344,189 +296,180 @@
           <div class="marquee marquee--reverse">
             <div class="marquee__group">
               {% for i in brands %}
-              <img src="{{ i.image.url }}" alt="" />
+              <img src="{{ i.image.url }}" alt="{{i.image.name}}" loading="lazy"/>
               {% endfor %}
             </div>
 
             <div aria-hidden="true" class="marquee__group">
               {% for i in brands %}
-              <img src="{{ i.image.url }}" alt="" />
+              <img src="{{ i.image.url }}" alt="{{i.image.name}}" loading="lazy"/>
               {% endfor %}
             </div>
           </div>
         </article>
-        <!-- //////////////////////Brands end/////////////////////////// -->
-        <!-- ///////////////////////END SUB PRODUCT CARDS/////////////////////////// -->
-        {% endblock %}
+      	{% load custom_filters %}
+  		{% if imp_reviews %}
+  			<div class="reviews">
+    			<center><h3 class="hedding">Rating & Reviews</h3></center>
+    			<br>
+    			<div class="rating">
+      				<div class="review-stat">
+        				<div class="review-stat-inside">
+          					<h1>{{avg_rating}}/5</h1>
+          					<h1>
+            					{% for _ in avg_rating|get_star_icons %}
+              						<i class="material-icons">star</i>
+            					{% endfor %}
+          					</h1>
+        				</div>
+        				{% if total_review %}<p>Reviewed by {{total_review}} {% if total_review == 1 %}user{% else %}users {% endif%}</p>{% endif %}
+        				<input type="hidden" value="{{per5}}" id="per4">
+        				<input type="hidden" value="{{per4}}" id="per3">
+        				<input type="hidden" value="{{per3}}" id="per2">
+        				<input type="hidden" value="{{per2}}" id="per1">
+        				<input type="hidden" value="{{per1}}" id="per0">
+      				</div>
+      				<div class="review-bar-div">
+        				<div class="review-bar">
+          					<p>5<i class="material-icons">star</i></p>
+          					<div class="rate-bar">
+            					<div id="filledDiv"><span id="4-span"></span></div>
+            					<p>{{per5}}%</p>
+          					</div>
+        				</div>
+        				<div class="review-bar">
+          					<p>4<i class="material-icons">star</i></p>
+          					<div class="rate-bar">
+            					<div id="filledDiv"><span id="3-span"></span></div>
+            					<p>{{per4}}%</p>
+          						</div>
+        					</div>
+        				<div class="review-bar">
+          					<p>3<i class="material-icons">star</i></p>
+          					<div class="rate-bar">
+            					<div id="filledDiv"><span id="2-span"></span></div>
+            					<p>{{per3}}%</p>
+          					</div>
+        				</div>
+        				<div class="review-bar">
+          					<p>2<i class="material-icons">star</i></p>
+          					<div class="rate-bar">
+            					<div id="filledDiv"><span id="1-span"></span></div>
+            					<p>{{per2}}%</p>
+          					</div>
+        				</div>
+        				<div class="review-bar">
+          					<p>1<i class="material-icons">star</i></p>
+          					<div class="rate-bar">
+           	 					<div id="filledDiv"><span id="0-span"></span></div>
+            					<p>{{per1}}%</p>
+          					</div>
+        				</div>
+      				</div>
+    			</div>
+    			<br>
+    			<div>
+      				<h4>Most Relevant Reviews</h4>
+      				<br>
+      				<div class="user-review">
+        				{% for review in imp_reviews %}
+                    		<div class="review-sec">
+                            	<div>
+            						<span class="name-letter">{{review.name |first_letter}}</span>
+          						</div>
+          						<div style="display:block">
+            						{% for _ in review.rating|get_star_icons %}
+              							<i class="material-icons">star</i>
+            						{% endfor %}<br>
+            						<p style="font-size:0.8em; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;color:darkblue;font-weight:bold;">{{review.product}}</p><br>
+            						{% if review.review %}<p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; text-align:justify;font-size: 0.9em;"><strong>Review:</strong> {{review.review}}</p>{% endif %}
+          						</div>
+          						<div>
+            						<span class="date">{{review.date}}</span>
+          						</div>
+                            	<br><hr><br>
+                    		</div>
+        				{% endfor %}
+      				</div>
+    			</div>
+  			</div>
+  		{% endif %}
       </div>
     </div>
-
-    <!-- ////////////////////FOOTER START///////////////////////// -->
-    <footer class="footer">
-      <div class="footer1">
-        <div>
-          <h1>Urban Agriculture</h1>
-        </div>
-        <div class="share-links">
-          <a href="https://www.facebook.com/way2agribusiness" target="_blank"
-            ><i class="fa fa-facebook-square"></i
-          ></a>
-          <a href="https://twitter.com/Way2agribusines" target="_blank"
-            ><i class="fa fa-twitter"></i
-          ></a>
-          <a
-            href="https://in.pinterest.com/Way2Agritech/_saved/"
-            target="_blank"
-            ><i class="fa fa-pinterest"></i
-          ></a>
-          <a
-            href="https://www.youtube.com/channel/UCEpkh59M-MDOj0TH6lxRpMg"
-            target="_blank"
-            ><i class="fa fa-youtube"></i
-          ></a>
-          <a href="https://www.instagram.com/way2agribusiness/" target="_blank"
-            ><i class="fa fa-instagram"></i
-          ></a>
-          <a
-            href="https://www.linkedin.com/feed/?trk=homepage-basic_signin-form_submit"
-            target="_blank"
-            ><i class="fa fa-linkedin"></i
-          ></a>
-        </div>
+	<div class="overlay">
+      <div class="full-image-container">
+        <i class="material-icons" onclick="closeFullImage()">close</i>
+        <img src="" alt="Full Image" class="full-image" onclick="toggleZoom(event)">
       </div>
-      <hr style="margin: 10px 0" />
-      <div class="footer2">
-        <div class="footer__addr">
-          <h2 style="font-weight: 500" class="footerb">Address</h2>
-
-          <address>
-            ಕೃಷಿ ಉದ್ದಿಮೆ ಕೇಂದ್ರ/ Agribusiness Center # 636, BDA Block 2, APMC
-            (RMC) Yard, Yeshwanthpura, Bengaluru - 560022<br />
-          </address>
-          <h2 style="font-weight: 500" class="footerb">Contact</h2>
-          <ul>
-            <li>
-              <i class="material-icons">mail</i>
-              <a href="mailto:way2agritech@way2agribusiness.com"
-                >way2agritech@way2agribusiness.com</a
-              >
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <i class="material-icons">phone</i>
-              <a href="tel:+91-8277078435">+91-8277078435</a>
-            </li>
-            <li>
-              <i class="material-icons">phone</i>
-              <a href="tel:+91-8277078435">080-24484173</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="footer__addr">
-          <h2 style="font-weight: 500" class="footerb">Loaction</h2>
-          <iframe
-            class="loc"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1943.6050773953866!2d77.54547795799927!3d13.022285093117015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3d6fbf2aa7ad%3A0x886c14d1df2c166b!2sWay2Agritech!5e0!3m2!1sen!2sin!4v1516097691514"
-            width="340"
-            height="210"
-            frameborder="0"
-            style="border: 0; text-align: center"
-            allowfullscreen=""
-          ></iframe>
-        </div>
-
-        <div class="footer__addr">
-          <h2 style="font-weight: 500" class="footerb">Our Online services</h2>
-          <ul>
-            <li style="color: white; font-size: 15px">
-              Way2ABI Website:<a
-                href="https://www.way2agribusiness.com/"
-                class="online"
-                >&nbsp;&nbsp;way2agribusiness.com</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              E-Commerce (Input):<a
-                href="https://way2agritech.com/"
-                class="online"
-                >&nbsp;&nbsp;way2agritech.com</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              E-Commerce (Output):<a href="https://way2foods.in/" class="online"
-                >&nbsp;&nbsp;way2foods.in</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              Social Media Web:<a
-                href="https://www.karnatakaagribusiness.com/"
-                class="online"
-                >&nbsp;&nbsp;karnatakaagribusiness.com</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              Farm Machineries:<a
-                href="https://www.powertiller.in/"
-                class="online"
-                >&nbsp;&nbsp;powertiller.in</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              PGP &amp; Plant Protection:<a
-                href="https://www.drsoilhealth.com/"
-                class="online"
-                >&nbsp;&nbsp;drsoilhealth.com</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              Terrace Gardening:<a
-                href="https://www.urbanagriculture.in/"
-                class="online"
-                >&nbsp;&nbsp;urbanagriculture.in</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              Vegetables:<a
-                href="https://www.way2vegetables.com/"
-                class="online"
-                >&nbsp;&nbsp;way2vegetables.com</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              Groceries:<a href="https://www.way2groceries.in/" class="online"
-                >&nbsp;&nbsp;way2groceries.in</a
-              ><br />
-            </li>
-            <li style="color: white; font-size: 15px">
-              Mob Apps:<a
-                href="https://play.google.com/store/search?q=way2agribusi&amp;c=apps"
-                class="online"
-                >&nbsp;&nbsp;Way2agribusiness Apps</a
-              ><br />
-            </li>
-          </ul>
-        </div>
-      </div>
-      <hr style="margin: 10px 0" />
-
-      <div class="legal">
-        <p>
-          CopyRight &copy; 2023 Way2Agribusines India Pvt Ltd. All Rights
-          Reserved
-          <a
-            class="footerb"
-            style="background-color: #ffc100; color: #215d0e"
-            href="https://way2agritech.com/"
-            target="_blank"
-          >
-            Way2Agribusiness
-          </a>
-        </p>
-      </div>
-    </footer>
+    </div>
     <script>
+    	if (window.innerWidth <= 768) {
+      			const introDivs = document.querySelectorAll('#long-text');
+      			introDivs.forEach(introDiv => {
+        			const actualContent = introDiv.textContent.trim();
+        			const wordsArray = actualContent.split(/\s+/);
+        			const displayWords = wordsArray.slice(0, 40).join(' ') + ' . . .';
+        			const actualHeight = window.getComputedStyle(introDiv).height;
+        			const trimmedHeight = '200px';
+        			introDiv.style.overflowY = 'hidden';
+        			introDiv.style.height = trimmedHeight;
+        			introDiv.textContent = displayWords;
+        			const readMore = document.createElement('a');
+        			readMore.innerHTML = 'Read More >>';
+        			readMore.style.color = 'darkblue';
+        			readMore.style.textDecoration = 'underline';
+        			introDiv.appendChild(readMore);
+        			readMore.addEventListener('click', function () {
+          			if (readMore.innerHTML.substr(0,readMore.innerHTML.length-9) === 'Read More') {
+            			introDiv.textContent = actualContent+' '+' . . .'+' '+ ' ';
+            			introDiv.style.height = actualHeight;
+            			readMore.innerHTML = 'Read Less <<';
+          			} else {
+            			introDiv.textContent = displayWords;
+            			introDiv.style.height = trimmedHeight;
+            			readMore.innerHTML = 'Read More >>';
+          			}
+          			introDiv.appendChild(readMore); 
+        		});
+      		});
+        }
+    	const banner = document.querySelector('.banner');
+        let imgIndex = 0;
+        function slideBanner() {
+            imgIndex = (imgIndex + 1) % banner.children.length;
+            const imgWidth = banner.children[0].offsetWidth; 
+            const imgMarginRight = parseFloat(window.getComputedStyle(banner.children[0]).marginRight);
+            const imgMarginLeft = parseFloat(window.getComputedStyle(banner.children[0]).marginLeft);
+            const translateX = -(imgIndex * (imgWidth + imgMarginRight + imgMarginLeft)); 
+            banner.style.transform = `translateX(${translateX}px)`; 
+        }
+        setInterval(slideBanner, 5000); 
+    
+    	const filledDivs = document.querySelectorAll('#filledDiv');
+  		filledDivs.forEach((filledDiv, index) => {
+    		const percentage = document.getElementById(`per${index}`).value; 
+    		const spanDiv = document.getElementById(`${index}-span`);
+    		const coloredWidth = percentage + '%';
+    		spanDiv.style.width = coloredWidth;
+    		spanDiv.style.backgroundColor = 'mediumseagreen';
+  		});
+    	const fullImageContainer = document.querySelector('.full-image-container');
+      	const overlay = document.querySelector('.overlay');
+      	function displayFullImage(imgSrc, imgTitle) {
+        	const fullImage = document.querySelector('.full-image');
+        	fullImage.src = imgSrc;
+        	fullImage.alt = imgTitle;
+			const overlay = document.querySelector('.overlay');
+        	overlay.style.display = 'block';
+        	fullImageContainer.style.display = 'block';
+     	 }
+      
+      	function closeFullImage(){
+        	overlay.style.display = 'none';
+        	fullImageContainer.style.display = 'none';
+      	}
+    	
+
       $(window).on('load', function () {
         var NoLi = $('.listOfassignment li').length;
         console.log(NoLi);
@@ -767,7 +710,28 @@
 
         $('.pagenationo').on('click', 'li', myfunction('pinterclicko'));
       });
+    /* Kannada text english font size javaScript start  */
+    function detectKannada(text){
+        const regex = /^[a-zA-Z]+$/;
+        return regex.test(text);
+
+      }
+      let engWords = '';
+      const container = document.querySelector('#kannada-text');
+      container.style.fontSize = '12px';
+      for (let i=0;i<container.innerHTML.length; i++){
+        if(detectKannada(container.innerHTML[i])){
+          engWords += `<span>${container.innerHTML[i]}</span>`;
+        }else{
+          engWords += container.innerHTML[i];
+        }
+      }
+      container.innerHTML = engWords;
+      for (let i=0; i<container.children.length;i++){
+       container.children[i].style.fontSize = '16px';
+       container.children[i].style.fontWeight = "bold"; 
+      }
+    /* Kannada text english font size javaScript start  */
     </script>
-  </body>
-  <script src="{% static 'js/script.js' %}"></script>
-</html>
+  <script async src="{% static 'js/script.js' %}" rel="preload" ></script>
+{% endblock %}
